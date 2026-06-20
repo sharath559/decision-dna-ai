@@ -26,8 +26,23 @@ def _load_rules() -> dict:
     return _CACHE
 
 
+_CUSTOM_RULES: dict[str, dict[str, Any]] = {}
+
+
+def register_custom_rule(rule_id: str, rule_data: dict[str, Any]) -> None:
+    """Register a custom rule version in memory."""
+    _CUSTOM_RULES[rule_id] = rule_data
+
+
 def get_rule(rule_id: str) -> dict[str, Any]:
     """Fetch a single business rule by ID."""
+    if rule_id in _CUSTOM_RULES:
+        logger.info(
+            "RulesMCP.get_rule (custom) | input=%s | ts=%s",
+            rule_id, datetime.utcnow().isoformat(),
+        )
+        return {"status": "ok", "rule": _CUSTOM_RULES[rule_id]}
+
     data = _load_rules()
     for r in data.get("rules", []):
         if r["rule_id"] == rule_id:

@@ -27,8 +27,23 @@ def _load_contracts() -> dict:
     return _CACHE
 
 
+_CUSTOM_CONTRACTS: dict[str, dict[str, Any]] = {}
+
+
+def register_custom_contract(contract_id: str, contract_data: dict[str, Any]) -> None:
+    """Register a custom contract version in memory."""
+    _CUSTOM_CONTRACTS[contract_id] = contract_data
+
+
 def get_contract(contract_id: str) -> dict[str, Any]:
     """Fetch a single contract by ID."""
+    if contract_id in _CUSTOM_CONTRACTS:
+        logger.info(
+            "ContractMCP.get_contract (custom) | input=%s | ts=%s",
+            contract_id, datetime.utcnow().isoformat(),
+        )
+        return {"status": "ok", "contract": _CUSTOM_CONTRACTS[contract_id]}
+
     data = _load_contracts()
     for c in data.get("contracts", []):
         if c["contract_id"] == contract_id:
@@ -44,6 +59,12 @@ def get_provider_contracts(provider_id: str) -> dict[str, Any]:
     """Fetch all contract versions for a provider, ordered by effective_date."""
     data = _load_contracts()
     matches = [c for c in data.get("contracts", []) if c["provider_id"] == provider_id]
+    
+    # Merge in-memory custom contracts for this provider
+    for c in _CUSTOM_CONTRACTS.values():
+        if c.get("provider_id") == provider_id and c not in matches:
+            matches.append(c)
+
     matches.sort(key=lambda c: c["effective_date"])
     logger.info(
         "ContractMCP.get_provider_contracts | provider=%s | count=%d | ts=%s",

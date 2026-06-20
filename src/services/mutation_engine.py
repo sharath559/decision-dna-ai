@@ -129,19 +129,14 @@ def generate_audit_report(
     )
 
 
-def run_full_analysis(case_id: str) -> dict[str, Any]:
+def run_analysis_for_pair(
+    old_genome: DecisionGenome,
+    new_genome: DecisionGenome,
+    case_meta: dict[str, Any],
+) -> dict[str, Any]:
     """
-    End-to-end orchestration for a single case.
-
-    Returns a dict with keys: old_genome, new_genome, gene_mutations,
-    mutation_report, impact, security, audit_report, case_meta.
+    Run the multi-agent decision forensics analysis on a custom genome pair.
     """
-    old_genome, new_genome = get_genome_pair(case_id)
-    if old_genome is None or new_genome is None:
-        raise ValueError(f"Could not load genome pair for case {case_id}")
-
-    case_meta = _find_case_meta(case_id)
-
     # 1. Detect gene-level mutations
     gene_mutations = detect_mutations(old_genome, new_genome)
 
@@ -156,7 +151,7 @@ def run_full_analysis(case_id: str) -> dict[str, Any]:
 
     # 4. Security scan on original input
     security = scan_security_risks(
-        case_meta.get("description", case_id)
+        case_meta.get("description", old_genome.case_id)
     )
 
     # 5. Audit report
@@ -177,3 +172,18 @@ def run_full_analysis(case_id: str) -> dict[str, Any]:
         "audit_report": audit_report,
         "case_meta": case_meta,
     }
+
+
+def run_full_analysis(case_id: str) -> dict[str, Any]:
+    """
+    End-to-end orchestration for a single case.
+
+    Returns a dict with keys: old_genome, new_genome, gene_mutations,
+    mutation_report, impact, security, audit_report, case_meta.
+    """
+    old_genome, new_genome = get_genome_pair(case_id)
+    if old_genome is None or new_genome is None:
+        raise ValueError(f"Could not load genome pair for case {case_id}")
+
+    case_meta = _find_case_meta(case_id)
+    return run_analysis_for_pair(old_genome, new_genome, case_meta)

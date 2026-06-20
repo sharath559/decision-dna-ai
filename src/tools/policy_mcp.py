@@ -31,6 +31,14 @@ def _load_policies() -> dict:
     return _CACHE
 
 
+_CUSTOM_POLICIES: dict[str, dict[str, Any]] = {}
+
+
+def register_custom_policy(policy_id: str, policy_data: dict[str, Any]) -> None:
+    """Register a custom policy version in memory."""
+    _CUSTOM_POLICIES[policy_id] = policy_data
+
+
 def get_policy_version(policy_id: str) -> dict[str, Any]:
     """
     Fetch a single policy version by ID.
@@ -44,6 +52,17 @@ def get_policy_version(policy_id: str) -> dict[str, Any]:
     -------
     dict with policy details, or an error payload.
     """
+    if policy_id in _CUSTOM_POLICIES:
+        version = _CUSTOM_POLICIES[policy_id]
+        result = {"status": "ok", "policy": version}
+        logger.info(
+            "PolicyMCP.get_policy_version (custom) | input=%s | output_keys=%s | ts=%s",
+            policy_id,
+            list(version.keys()),
+            datetime.utcnow().isoformat(),
+        )
+        return result
+
     data = _load_policies()
     for version in data.get("versions", []):
         if version["policy_id"] == policy_id:

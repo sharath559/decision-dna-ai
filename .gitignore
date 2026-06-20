@@ -1,5 +1,6 @@
 .env
 .local/
+**pycache**/
 __pycache__/
 *.pyc
 *.pyo
@@ -9,3 +10,4 @@ dist/
 build/
 .ipynb_checkpoints/
 .streamlit/secrets.toml
+*.log
