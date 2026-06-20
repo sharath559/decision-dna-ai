@@ -1,0 +1,50 @@
+{
+  "requirements": {
+    "prior_authorization": {
+      "imaging_mri": {
+        "MRI-MED-NEC-v1": {
+          "required": ["clinical_notes", "failed_conservative_treatment"],
+          "optional": ["radiology_report"]
+        },
+        "MRI-MED-NEC-v2": {
+          "required": ["clinical_notes", "failed_conservative_treatment", "specialist_review"],
+          "optional": ["radiology_report", "peer_to_peer_notes"]
+        }
+      }
+    },
+    "claims": {
+      "reimbursement": {
+        "CLM-REIMB-v5": {
+          "required": ["claim_form", "cpt_codes", "provider_npi"],
+          "optional": ["supporting_notes"]
+        },
+        "CLM-REIMB-v6": {
+          "required": ["claim_form", "cpt_codes", "provider_npi", "referral_id"],
+          "optional": ["supporting_notes", "referral_authorization"]
+        }
+      }
+    },
+    "network": {
+      "provider_participation": {
+        "NET-PROV-v2": {
+          "required": ["signed_contract", "credentialing_verification", "w9_form"],
+          "optional": ["malpractice_certificate"]
+        }
+      }
+    }
+  },
+  "submissions": {
+    "PA-MRI-1001": {
+      "2026-01-12": ["clinical_notes", "failed_conservative_treatment"],
+      "2026-06-15": ["clinical_notes", "failed_conservative_treatment"]
+    },
+    "CLM-5502": {
+      "2026-02-20": ["claim_form", "cpt_codes", "provider_npi"],
+      "2026-06-10": ["claim_form", "cpt_codes", "provider_npi"]
+    },
+    "NET-P680": {
+      "2026-03-01": ["signed_contract", "credentialing_verification", "w9_form"],
+      "2026-06-01": ["signed_contract", "credentialing_verification", "w9_form"]
+    }
+  }
+}

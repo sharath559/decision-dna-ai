@@ -1,0 +1,119 @@
+{
+  "versions": [
+    {
+      "policy_id": "MRI-MED-NEC-v1",
+      "effective_date": "2025-07-01",
+      "expiration_date": "2026-03-31",
+      "policy_name": "MRI Medical Necessity — Standard",
+      "category": "prior_authorization",
+      "subcategory": "imaging_mri",
+      "clauses": [
+        {
+          "clause_id": "MRI-C1",
+          "description": "Clinical notes documenting symptoms required",
+          "requirement": "clinical_notes"
+        },
+        {
+          "clause_id": "MRI-C2",
+          "description": "Evidence of failed conservative treatment required",
+          "requirement": "failed_conservative_treatment"
+        }
+      ],
+      "notes": "Standard MRI prior auth policy effective through Q1 2026."
+    },
+    {
+      "policy_id": "MRI-MED-NEC-v2",
+      "effective_date": "2026-04-01",
+      "expiration_date": "2027-03-31",
+      "policy_name": "MRI Medical Necessity — Enhanced Review",
+      "category": "prior_authorization",
+      "subcategory": "imaging_mri",
+      "clauses": [
+        {
+          "clause_id": "MRI-C1",
+          "description": "Clinical notes documenting symptoms required",
+          "requirement": "clinical_notes"
+        },
+        {
+          "clause_id": "MRI-C2",
+          "description": "Evidence of failed conservative treatment required",
+          "requirement": "failed_conservative_treatment"
+        },
+        {
+          "clause_id": "MRI-C3",
+          "description": "Specialist review and attestation required for all MRI prior authorizations",
+          "requirement": "specialist_review"
+        }
+      ],
+      "notes": "Policy updated to require specialist review per medical advisory board recommendation."
+    },
+    {
+      "policy_id": "CLM-REIMB-v5",
+      "effective_date": "2025-01-01",
+      "expiration_date": "2026-02-28",
+      "policy_name": "Claim Reimbursement — Standard",
+      "category": "claims",
+      "subcategory": "reimbursement",
+      "clauses": [
+        {
+          "clause_id": "CLM-C1",
+          "description": "Provider must be in-network at date of service",
+          "requirement": "in_network_provider"
+        },
+        {
+          "clause_id": "CLM-C2",
+          "description": "Valid CPT code required",
+          "requirement": "valid_cpt_code"
+        }
+      ],
+      "notes": "Standard claims reimbursement policy."
+    },
+    {
+      "policy_id": "CLM-REIMB-v6",
+      "effective_date": "2026-03-01",
+      "expiration_date": "2027-02-28",
+      "policy_name": "Claim Reimbursement — Enhanced Validation",
+      "category": "claims",
+      "subcategory": "reimbursement",
+      "clauses": [
+        {
+          "clause_id": "CLM-C1",
+          "description": "Provider must be in-network at date of service",
+          "requirement": "in_network_provider"
+        },
+        {
+          "clause_id": "CLM-C2",
+          "description": "Valid CPT code required",
+          "requirement": "valid_cpt_code"
+        },
+        {
+          "clause_id": "CLM-C3",
+          "description": "Referral ID required for specialist visits",
+          "requirement": "referral_id"
+        }
+      ],
+      "notes": "Referral ID requirement added per network compliance update."
+    },
+    {
+      "policy_id": "NET-PROV-v2",
+      "effective_date": "2025-01-01",
+      "expiration_date": "2026-12-31",
+      "policy_name": "Provider Network Participation — Standard",
+      "category": "network",
+      "subcategory": "provider_participation",
+      "clauses": [
+        {
+          "clause_id": "NET-C1",
+          "description": "Active contract required for network participation",
+          "requirement": "active_contract"
+        },
+        {
+          "clause_id": "NET-C2",
+          "description": "Credentialing verification current within 24 months",
+          "requirement": "current_credentialing"
+        }
+      ],
+      "notes": "Standard provider network participation policy."
+    }
+  ]
+}

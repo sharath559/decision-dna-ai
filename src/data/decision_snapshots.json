@@ -1,0 +1,250 @@
+{
+  "snapshots": [
+    {
+      "case_id": "PA-MRI-1001",
+      "snapshot_date": "2026-01-12",
+      "decision": "APPROVED",
+      "decision_type": "prior_authorization",
+      "member_id": "MBR-SYNTH-90001",
+      "provider_id": "PROV-220",
+      "provider_name": "Metro Imaging Center",
+      "procedure": "MRI Lumbar Spine",
+      "cpt_code": "72148",
+      "genes": {
+        "policy_gene": {
+          "version": "MRI-MED-NEC-v1",
+          "status": "matched",
+          "policy_name": "MRI Medical Necessity — Standard"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P220-v3",
+          "network_status": "IN_NETWORK",
+          "provider_status": "ACTIVE"
+        },
+        "rule_gene": {
+          "version": "RULE-PA-v4",
+          "validations_passed": ["clinical_notes_present", "conservative_treatment_documented"],
+          "validations_failed": []
+        },
+        "documentation_gene": {
+          "required": ["clinical_notes", "failed_conservative_treatment"],
+          "submitted": ["clinical_notes", "failed_conservative_treatment"],
+          "missing": []
+        },
+        "network_gene": {
+          "status": "IN_NETWORK",
+          "network": "BlueSelect PPO"
+        },
+        "evidence_gene": {
+          "supporting": ["Clinical notes confirm lumbar pain >6 weeks", "PT documentation shows 8 sessions without improvement"],
+          "contradicting": []
+        }
+      }
+    },
+    {
+      "case_id": "PA-MRI-1001",
+      "snapshot_date": "2026-06-15",
+      "decision": "DENIED",
+      "decision_type": "prior_authorization",
+      "member_id": "MBR-SYNTH-90001",
+      "provider_id": "PROV-220",
+      "provider_name": "Metro Imaging Center",
+      "procedure": "MRI Lumbar Spine",
+      "cpt_code": "72148",
+      "genes": {
+        "policy_gene": {
+          "version": "MRI-MED-NEC-v2",
+          "status": "partially_matched",
+          "policy_name": "MRI Medical Necessity — Enhanced Review"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P220-v3",
+          "network_status": "IN_NETWORK",
+          "provider_status": "ACTIVE"
+        },
+        "rule_gene": {
+          "version": "RULE-PA-v5",
+          "validations_passed": ["clinical_notes_present", "conservative_treatment_documented"],
+          "validations_failed": ["specialist_review_attached"]
+        },
+        "documentation_gene": {
+          "required": ["clinical_notes", "failed_conservative_treatment", "specialist_review"],
+          "submitted": ["clinical_notes", "failed_conservative_treatment"],
+          "missing": ["specialist_review"]
+        },
+        "network_gene": {
+          "status": "IN_NETWORK",
+          "network": "BlueSelect PPO"
+        },
+        "evidence_gene": {
+          "supporting": ["Clinical notes confirm lumbar pain >6 weeks", "PT documentation shows 8 sessions without improvement"],
+          "contradicting": ["Specialist review and attestation not submitted"]
+        }
+      }
+    },
+    {
+      "case_id": "CLM-5502",
+      "snapshot_date": "2026-02-20",
+      "decision": "PAID",
+      "decision_type": "claim",
+      "member_id": "MBR-SYNTH-90045",
+      "provider_id": "PROV-450",
+      "provider_name": "Lakeside Orthopedic Associates",
+      "procedure": "Office Visit — Specialist",
+      "cpt_code": "99214",
+      "genes": {
+        "policy_gene": {
+          "version": "CLM-REIMB-v5",
+          "status": "matched",
+          "policy_name": "Claim Reimbursement — Standard"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P450-v2",
+          "network_status": "IN_NETWORK",
+          "provider_status": "ACTIVE"
+        },
+        "rule_gene": {
+          "version": "RULE-CLM-v3",
+          "validations_passed": ["provider_in_network", "valid_cpt_code", "dos_within_timely_filing"],
+          "validations_failed": []
+        },
+        "documentation_gene": {
+          "required": ["claim_form", "cpt_codes", "provider_npi"],
+          "submitted": ["claim_form", "cpt_codes", "provider_npi"],
+          "missing": []
+        },
+        "network_gene": {
+          "status": "IN_NETWORK",
+          "network": "BlueSelect PPO"
+        },
+        "evidence_gene": {
+          "supporting": ["Claim form complete", "CPT 99214 valid for specialist visit", "Provider NPI verified"],
+          "contradicting": []
+        }
+      }
+    },
+    {
+      "case_id": "CLM-5502",
+      "snapshot_date": "2026-06-10",
+      "decision": "REJECTED",
+      "decision_type": "claim",
+      "member_id": "MBR-SYNTH-90045",
+      "provider_id": "PROV-450",
+      "provider_name": "Lakeside Orthopedic Associates",
+      "procedure": "Office Visit — Specialist",
+      "cpt_code": "99214",
+      "genes": {
+        "policy_gene": {
+          "version": "CLM-REIMB-v6",
+          "status": "partially_matched",
+          "policy_name": "Claim Reimbursement — Enhanced Validation"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P450-v3",
+          "network_status": "OUT_OF_NETWORK",
+          "provider_status": "TERMINATED"
+        },
+        "rule_gene": {
+          "version": "RULE-CLM-v4",
+          "validations_passed": ["valid_cpt_code", "dos_within_timely_filing"],
+          "validations_failed": ["provider_in_network", "referral_id_present"]
+        },
+        "documentation_gene": {
+          "required": ["claim_form", "cpt_codes", "provider_npi", "referral_id"],
+          "submitted": ["claim_form", "cpt_codes", "provider_npi"],
+          "missing": ["referral_id"]
+        },
+        "network_gene": {
+          "status": "OUT_OF_NETWORK",
+          "network": "BlueSelect PPO"
+        },
+        "evidence_gene": {
+          "supporting": ["Claim form complete", "CPT 99214 valid"],
+          "contradicting": ["Provider PROV-450 terminated from BlueSelect PPO effective 2026-04-30", "Referral ID not submitted"]
+        }
+      }
+    },
+    {
+      "case_id": "NET-P680",
+      "snapshot_date": "2026-03-01",
+      "decision": "ACTIVE",
+      "decision_type": "network",
+      "member_id": null,
+      "provider_id": "PROV-680",
+      "provider_name": "Valley Primary Care Group",
+      "procedure": null,
+      "cpt_code": null,
+      "genes": {
+        "policy_gene": {
+          "version": "NET-PROV-v2",
+          "status": "matched",
+          "policy_name": "Provider Network Participation — Standard"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P680-v1",
+          "network_status": "IN_NETWORK",
+          "provider_status": "ACTIVE"
+        },
+        "rule_gene": {
+          "version": "RULE-NET-v2",
+          "validations_passed": ["active_contract", "credentialing_current"],
+          "validations_failed": []
+        },
+        "documentation_gene": {
+          "required": ["signed_contract", "credentialing_verification", "w9_form"],
+          "submitted": ["signed_contract", "credentialing_verification", "w9_form"],
+          "missing": []
+        },
+        "network_gene": {
+          "status": "IN_NETWORK",
+          "network": "BlueChoice HMO"
+        },
+        "evidence_gene": {
+          "supporting": ["Contract signed and active", "Credentialing valid through 2026-06-30", "W-9 on file"],
+          "contradicting": []
+        }
+      }
+    },
+    {
+      "case_id": "NET-P680",
+      "snapshot_date": "2026-06-01",
+      "decision": "TERMINATED",
+      "decision_type": "network",
+      "member_id": null,
+      "provider_id": "PROV-680",
+      "provider_name": "Valley Primary Care Group",
+      "procedure": null,
+      "cpt_code": null,
+      "genes": {
+        "policy_gene": {
+          "version": "NET-PROV-v2",
+          "status": "matched",
+          "policy_name": "Provider Network Participation — Standard"
+        },
+        "contract_gene": {
+          "version": "CONTRACT-P680-v2",
+          "network_status": "OUT_OF_NETWORK",
+          "provider_status": "TERMINATED"
+        },
+        "rule_gene": {
+          "version": "RULE-NET-v2",
+          "validations_passed": ["credentialing_current"],
+          "validations_failed": ["active_contract", "continuity_of_care_review"]
+        },
+        "documentation_gene": {
+          "required": ["signed_contract", "credentialing_verification", "w9_form"],
+          "submitted": ["signed_contract", "credentialing_verification", "w9_form"],
+          "missing": []
+        },
+        "network_gene": {
+          "status": "OUT_OF_NETWORK",
+          "network": "BlueChoice HMO"
+        },
+        "evidence_gene": {
+          "supporting": ["Credentialing valid through 2026-06-30"],
+          "contradicting": ["Contract terminated effective 2026-05-14", "BlueChoice HMO network tier restructured", "Continuity of care review pending for active patients"]
+        }
+      }
+    }
+  ]
+}

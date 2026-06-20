@@ -1,0 +1,68 @@
+{
+  "cases": [
+    {
+      "case_id": "PA-MRI-1001",
+      "title": "MRI Prior Authorization Decision Drift",
+      "decision_type": "prior_authorization",
+      "description": "MRI lumbar spine prior authorization changed from APPROVED (January) to DENIED (June). Root cause: policy gene mutation introduced specialist review requirement; documentation gene mutation shows specialist review was not submitted.",
+      "old_snapshot_date": "2026-01-12",
+      "new_snapshot_date": "2026-06-15",
+      "old_decision": "APPROVED",
+      "new_decision": "DENIED",
+      "expected_primary_mutation": "Policy Gene",
+      "expected_secondary_mutations": ["Documentation Gene", "Rule Gene"],
+      "expected_root_cause": "Policy updated to require specialist review (MRI-MED-NEC-v2). Specialist review not submitted. Documentation gap caused denial.",
+      "risk_level": "HIGH",
+      "human_review_required": true,
+      "timeline_events": [
+        {"date": "2026-01-12", "event": "Original PA submitted and approved under MRI-MED-NEC-v1"},
+        {"date": "2026-04-01", "event": "Policy updated to MRI-MED-NEC-v2 — specialist review now required"},
+        {"date": "2026-04-01", "event": "Rule updated to RULE-PA-v5 — specialist review validation added"},
+        {"date": "2026-06-15", "event": "PA resubmitted — denied under MRI-MED-NEC-v2 due to missing specialist review"}
+      ]
+    },
+    {
+      "case_id": "CLM-5502",
+      "title": "Claim Payment Decision Drift",
+      "decision_type": "claim",
+      "description": "Specialist office visit claim changed from PAID (February) to REJECTED (June). Root cause: provider moved out of network (contract gene mutation), and referral ID now required but missing (rule gene mutation).",
+      "old_snapshot_date": "2026-02-20",
+      "new_snapshot_date": "2026-06-10",
+      "old_decision": "PAID",
+      "new_decision": "REJECTED",
+      "expected_primary_mutation": "Contract Gene",
+      "expected_secondary_mutations": ["Rule Gene", "Network Gene", "Documentation Gene"],
+      "expected_root_cause": "Provider PROV-450 terminated from BlueSelect PPO effective 2026-04-30. Claim rule updated to require referral ID for specialist visits. Referral ID not submitted.",
+      "risk_level": "HIGH",
+      "human_review_required": true,
+      "timeline_events": [
+        {"date": "2026-02-20", "event": "Claim submitted and paid — provider in-network, rules satisfied"},
+        {"date": "2026-03-01", "event": "Claim rule updated to RULE-CLM-v4 — referral ID now required"},
+        {"date": "2026-04-30", "event": "Provider PROV-450 contract terminated from BlueSelect PPO"},
+        {"date": "2026-05-01", "event": "Policy updated to CLM-REIMB-v6 — enhanced validation"},
+        {"date": "2026-06-10", "event": "Claim resubmitted — rejected: provider out-of-network, referral ID missing"}
+      ]
+    },
+    {
+      "case_id": "NET-P680",
+      "title": "Provider Network / Contract Decision Drift",
+      "decision_type": "network",
+      "description": "Provider network status changed from ACTIVE/IN_NETWORK (March) to TERMINATED/OUT_OF_NETWORK (June). Root cause: contract gene mutation due to network tier restructuring. Continuity of care flag requires human review.",
+      "old_snapshot_date": "2026-03-01",
+      "new_snapshot_date": "2026-06-01",
+      "old_decision": "ACTIVE",
+      "new_decision": "TERMINATED",
+      "expected_primary_mutation": "Contract Gene",
+      "expected_secondary_mutations": ["Network Gene"],
+      "expected_root_cause": "BlueChoice HMO network restructured. Provider PROV-680 did not meet new tier requirements. Contract terminated effective 2026-05-14. Continuity of care obligations pending.",
+      "risk_level": "CRITICAL",
+      "human_review_required": true,
+      "timeline_events": [
+        {"date": "2026-03-01", "event": "Provider active and in-network under CONTRACT-P680-v1"},
+        {"date": "2026-05-14", "event": "Contract terminated — BlueChoice HMO network restructured"},
+        {"date": "2026-05-15", "event": "Provider moved to OUT_OF_NETWORK status"},
+        {"date": "2026-06-01", "event": "Network status confirmed TERMINATED — continuity of care review pending"}
+      ]
+    }
+  ]
+}

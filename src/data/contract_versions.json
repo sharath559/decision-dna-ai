@@ -1,0 +1,67 @@
+{
+  "contracts": [
+    {
+      "contract_id": "CONTRACT-P220-v3",
+      "provider_id": "PROV-220",
+      "provider_name": "Metro Imaging Center",
+      "effective_date": "2025-01-01",
+      "termination_date": null,
+      "status": "ACTIVE",
+      "network": "BlueSelect PPO",
+      "network_status": "IN_NETWORK",
+      "credentialing_expiry": "2027-01-15",
+      "notes": "Active contract with Metro Imaging Center."
+    },
+    {
+      "contract_id": "CONTRACT-P450-v2",
+      "provider_id": "PROV-450",
+      "provider_name": "Lakeside Orthopedic Associates",
+      "effective_date": "2025-01-01",
+      "termination_date": null,
+      "status": "ACTIVE",
+      "network": "BlueSelect PPO",
+      "network_status": "IN_NETWORK",
+      "credentialing_expiry": "2026-08-30",
+      "notes": "Active contract with Lakeside Orthopedic."
+    },
+    {
+      "contract_id": "CONTRACT-P450-v3",
+      "provider_id": "PROV-450",
+      "provider_name": "Lakeside Orthopedic Associates",
+      "effective_date": "2026-05-01",
+      "termination_date": "2026-04-30",
+      "status": "TERMINATED",
+      "network": "BlueSelect PPO",
+      "network_status": "OUT_OF_NETWORK",
+      "credentialing_expiry": "2026-08-30",
+      "termination_reason": "Provider withdrew from BlueSelect PPO network. Contract not renewed.",
+      "notes": "Contract terminated effective 2026-04-30. Provider moved out of network."
+    },
+    {
+      "contract_id": "CONTRACT-P680-v1",
+      "provider_id": "PROV-680",
+      "provider_name": "Valley Primary Care Group",
+      "effective_date": "2024-07-01",
+      "termination_date": null,
+      "status": "ACTIVE",
+      "network": "BlueChoice HMO",
+      "network_status": "IN_NETWORK",
+      "credentialing_expiry": "2026-06-30",
+      "notes": "Active contract with Valley Primary Care."
+    },
+    {
+      "contract_id": "CONTRACT-P680-v2",
+      "provider_id": "PROV-680",
+      "provider_name": "Valley Primary Care Group",
+      "effective_date": "2026-05-15",
+      "termination_date": "2026-05-14",
+      "status": "TERMINATED",
+      "network": "BlueChoice HMO",
+      "network_status": "OUT_OF_NETWORK",
+      "credentialing_expiry": "2026-06-30",
+      "termination_reason": "BlueChoice HMO network tier restructured. Provider did not meet new tier requirements.",
+      "continuity_of_care_flag": true,
+      "notes": "Contract ended due to network restructuring. Continuity of care review required for active patients."
+    }
+  ]
+}

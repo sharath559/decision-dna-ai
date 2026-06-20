@@ -1,0 +1,69 @@
+{
+  "rules": [
+    {
+      "rule_id": "RULE-PA-v4",
+      "effective_date": "2025-01-01",
+      "expiration_date": "2026-03-31",
+      "rule_name": "Prior Auth Validation — Standard",
+      "category": "prior_authorization",
+      "validations": [
+        {"check": "clinical_notes_present", "description": "Clinical notes must be attached"},
+        {"check": "conservative_treatment_documented", "description": "Failed conservative treatment must be documented"}
+      ],
+      "notes": "Standard PA validation rule set."
+    },
+    {
+      "rule_id": "RULE-PA-v5",
+      "effective_date": "2026-04-01",
+      "expiration_date": "2027-03-31",
+      "rule_name": "Prior Auth Validation — Enhanced",
+      "category": "prior_authorization",
+      "validations": [
+        {"check": "clinical_notes_present", "description": "Clinical notes must be attached"},
+        {"check": "conservative_treatment_documented", "description": "Failed conservative treatment must be documented"},
+        {"check": "specialist_review_attached", "description": "Specialist review attestation must be attached"}
+      ],
+      "notes": "Specialist review validation added per policy update MRI-MED-NEC-v2."
+    },
+    {
+      "rule_id": "RULE-CLM-v3",
+      "effective_date": "2025-01-01",
+      "expiration_date": "2026-02-28",
+      "rule_name": "Claim Submission Validation — Standard",
+      "category": "claims",
+      "validations": [
+        {"check": "provider_in_network", "description": "Servicing provider must be in-network"},
+        {"check": "valid_cpt_code", "description": "CPT code must be valid and active"},
+        {"check": "dos_within_timely_filing", "description": "Date of service within timely filing limit"}
+      ],
+      "notes": "Standard claims validation."
+    },
+    {
+      "rule_id": "RULE-CLM-v4",
+      "effective_date": "2026-03-01",
+      "expiration_date": "2027-02-28",
+      "rule_name": "Claim Submission Validation — Enhanced",
+      "category": "claims",
+      "validations": [
+        {"check": "provider_in_network", "description": "Servicing provider must be in-network"},
+        {"check": "valid_cpt_code", "description": "CPT code must be valid and active"},
+        {"check": "dos_within_timely_filing", "description": "Date of service within timely filing limit"},
+        {"check": "referral_id_present", "description": "Referral ID required for specialist visits"}
+      ],
+      "notes": "Referral ID validation added per compliance directive."
+    },
+    {
+      "rule_id": "RULE-NET-v2",
+      "effective_date": "2025-01-01",
+      "expiration_date": "2027-12-31",
+      "rule_name": "Network Participation Validation",
+      "category": "network",
+      "validations": [
+        {"check": "active_contract", "description": "Provider must have active contract"},
+        {"check": "credentialing_current", "description": "Credentialing must be current"},
+        {"check": "continuity_of_care_review", "description": "If terminated, check continuity of care obligations"}
+      ],
+      "notes": "Network participation rules including continuity of care."
+    }
+  ]
+}
