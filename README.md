@@ -153,36 +153,11 @@ python notebooks/decision_dna_ai_demo.py
 
 The app opens at `http://localhost:8501` with all three demo cases loaded.
 
-## Kaggle Submission Notes
-
-1. Upload the repo as a Kaggle dataset or clone from GitHub
-2. The notebook demo at `notebooks/decision_dna_ai_demo.py` can be pasted cell-by-cell into a Kaggle notebook
-3. No API keys required — runs fully with synthetic data
-4. Track: **Agents for Business**
-
-## Antigravity Usage
-
-This project was built with assistance from **Antigravity**, Google's agentic AI coding assistant:
-
-- **Architecture design** — agent responsibilities, MCP tool layer design
-- **Code generation** — Pydantic models, agent implementations, Streamlit UI
-- **Iteration** — self-review for import errors, schema consistency, UI rendering
-- **Documentation** — README, Kaggle writeup, video script
-
-See `docs/antigravity_usage.md` for detailed usage documentation.
-
-## Originality and Differentiation
-
-DecisionDNA AI is **not** a generic chatbot or generic AI observability tool.
-
-It is original because:
-- **Decision Genome metaphor** — models every healthcare decision as a DNA fingerprint with specific genes
-- **Temporal forensics** — compares decision snapshots over time, not just current state
-- **Multi-agent architecture** — nine specialized agents with domain expertise
-- **Healthcare domain depth** — uses real-world concepts (prior auth, claims adjudication, provider networks, credentialing, continuity of care)
-- **MCP-style tool layer** — structured external data access with logging
-- **Security-first** — prompt injection, PII detection, unsafe instruction scanning built in
-- **Reproducible** — deterministic outputs, synthetic data, no external dependencies
+For detailed information on design decisions, multi-agent evaluation metrics, and development assistants, check the [docs](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs) directory:
+- [Architecture & Metaphor](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/architecture.md)
+- [Originality Statement](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/originality_statement.md)
+- [Antigravity AI Assistant Usage](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/antigravity_usage.md)
+- [Kaggle Writeup & Setup](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/kaggle_writeup.md)
 
 ## Limitations
 
@@ -206,3 +181,4 @@ It is original because:
 **Built by Sharath Chandra** · Synthetic Demo Only · No PHI
 
 🧬 DecisionDNA AI — Temporal Decision Forensics for Healthcare Networks
+
