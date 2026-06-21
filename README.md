@@ -6,6 +6,20 @@ DecisionDNA AI is a temporal decision forensics platform for healthcare networks
 
 ---
 
+## 🎯 Demo Context & Target Audience (Layman's Overview)
+
+### ❓ What is this Application and UI?
+This application is a **Developer & Auditor Forensic Control Center**. It is NOT the end-user clinical application.
+* **End-User Application:** In production, doctors and claims processors use their existing medical software (like Epic EHR or claims tools). They do not see genomes or agents.
+* **This Dashboard:** Built specifically to visualize, debug, and explain the "brain" of the AI agents to developers, compliance auditors, and Kaggle/Gemini competition judges.
+
+### 🏥 What problem are we solving? ("Decision Drift")
+In healthcare, rules change constantly. A medical claim approved in January might be denied in June. Cross-referencing siloed contracts, rule engines, and guidelines to figure out *why* a decision changed takes hours of manual work. 
+* **Our Solution:** We bundle all decision factors (policies, rules, network contracts, paperwork checklists) into a structured **"Decision Genome"**. 
+* **How Agents Interact:** When a decision changes, **6 specialized AI agents** act as digital investigators (e.g., Policy Agent looks at policy versions, Contract Agent checks provider network standing, Rule Agent checks passed validations). They run a side-by-side comparison, compute a **Mutation Score (out of 100)** to measure the scale of changes, and output a downloadable compliance audit report explaining the drift in seconds.
+
+---
+
 ## Problem Statement
 
 Healthcare payer organizations, insurance companies, provider networks, claims teams, and compliance teams often struggle to answer:

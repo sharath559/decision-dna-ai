@@ -715,6 +715,21 @@ with tabs[0]:
     st.markdown('<div style="padding:1.5rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">Forensic Analytics Dashboard</h1>'
                 '<p style="color:var(--text-color);opacity:0.7;font-size:1.05rem;margin-top:0px;">Real-time decision drift tracking and mutation analysis</p></div>', unsafe_allow_html=True)
 
+    # Demo & Architecture Guide
+    st.markdown(
+        '<div class="glass-card" style="border-left: 5px solid #a855f7; margin-bottom: 1.5rem; background: rgba(168, 85, 247, 0.04);">'
+        '  <h3 style="color:#a855f7; margin-top: 0px; margin-bottom: 0.6rem; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">'
+        '    <span>🧭</span> Developer & Judge Demo Guide'
+        '  </h3>'
+        '  <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 0px; opacity: 0.95;">'
+        '    <strong>What is this Dashboard?</strong> This is an interactive forensic control center showing how <strong>6 specialized AI agents</strong> collaborate under the hood to audit healthcare decision changes (e.g. policy updates or contract shifts).<br/>'
+        '    <strong>How they interact:</strong> The system models clinical data as a structured <strong>Decision Genome</strong>. When decisions "drift" over time, the agents run side-by-side comparisons (in the DNA and Mutation tabs) to identify mutations and output a downloadable compliance report.<br/>'
+        '    <strong>Production Context:</strong> In a real-world enterprise application, these agents run silently as background APIs integrated directly inside hospital EHR systems (like Epic) or insurance claim queues, not as a standalone front-end dashboard.'
+        '  </p>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
     # Aggregate metrics across all cases (include custom case if active)
     all_analyses = {cid: cached_analysis(cid) for cid in [c["case_id"] for c in CASES]}
     if mode == "🧬 Create Custom Case" and analysis_source == "custom":
