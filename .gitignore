@@ -13,5 +13,4 @@ build/
 *.log
 
 # Personal demo preparation files
-docs/demo_script.md
-docs/demo_capture_checklist.md
+# (No longer ignored)
