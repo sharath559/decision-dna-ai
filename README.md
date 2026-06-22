@@ -160,18 +160,12 @@ python scripts/generate_project_signature.py
 ```bash
 # Run the Streamlit app
 streamlit run app.py
-
-# Or run the notebook demo
-python notebooks/decision_dna_ai_demo.py
 ```
 
 The app opens at `http://localhost:8501` with all three demo cases loaded.
 
-For detailed information on design decisions, multi-agent evaluation metrics, and development assistants, check the [docs](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs) directory:
-- [Architecture & Metaphor](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/architecture.md)
-- [Originality Statement](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/originality_statement.md)
-- [Antigravity AI Assistant Usage](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/antigravity_usage.md)
-- [Kaggle Writeup & Setup](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/kaggle_writeup.md)
+For the step-by-step video demo walk-through script, check:
+- [Demo Video Script](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/docs/demo_script.md)
 
 ## Limitations
 
