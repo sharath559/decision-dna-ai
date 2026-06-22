@@ -59,192 +59,244 @@ from src.utils.formatting import (
     status_pill,
     agent_card,
     mcp_tool_card,
+    competition_badge,
+    github_button,
+    youtube_button,
+    value_stat_card,
+    architecture_flow_html,
 )
 
 # ── Custom Styling Injection ──────────────────────────────────────────────
 
 def inject_premium_styles():
+    theme = st.session_state.get("theme", "dark")
     st.markdown(
-        "<link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">"
-        "<style>"
-        ":root {"
-        "    --card-bg: rgba(30, 41, 59, 0.45);"
-        "    --card-border: rgba(255, 255, 255, 0.08);"
-        "    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);"
-        "    --sidebar-bg: #0f172a;"
-        "    --sidebar-border: rgba(255, 255, 255, 0.08);"
-        "}"
-        "@media (prefers-color-scheme: light) {"
-        "    :root {"
-        "        --card-bg: rgba(255, 255, 255, 0.85);"
-        "        --card-border: rgba(56, 189, 248, 0.15);"
-        "        --card-shadow: 0 8px 32px 0 rgba(56, 189, 248, 0.05);"
-        "        --sidebar-bg: #f8fafc;"
-        "        --sidebar-border: rgba(56, 189, 248, 0.15);"
-        "    }"
-        "}"
-        "[data-theme=\"light\"] {"
-        "    --card-bg: rgba(255, 255, 255, 0.85) !important;"
-        "    --card-border: rgba(56, 189, 248, 0.15) !important;"
-        "    --card-shadow: 0 8px 32px 0 rgba(56, 189, 248, 0.05) !important;"
-        "    --sidebar-bg: #f8fafc !important;"
-        "    --sidebar-border: rgba(56, 189, 248, 0.15) !important;"
-        "}"
-        "[data-theme=\"dark\"] {"
-        "    --card-bg: rgba(30, 41, 59, 0.45) !important;"
-        "    --card-border: rgba(255, 255, 255, 0.08) !important;"
-        "    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;"
-        "    --sidebar-bg: #0f172a !important;"
-        "    --sidebar-border: rgba(255, 255, 255, 0.08) !important;"
-        "}"
-        "html, body, [class*=\"css\"] {"
-        "    font-family: 'Outfit', sans-serif;"
-        "}"
-        "@keyframes gradient-animation {"
-        "    0% { background-position: 0% 50%; }"
-        "    50% { background-position: 100% 50%; }"
-        "    100% { background-position: 0% 50%; }"
-        "}"
-        ".premium-header {"
-        "    font-size: 2.8rem;"
-        "    font-weight: 700;"
-        "    background: linear-gradient(-45deg, #38bdf8, #a855f7, #ec4899, #38bdf8);"
-        "    background-size: 300% 300%;"
-        "    animation: gradient-animation 6s ease infinite;"
-        "    -webkit-background-clip: text;"
-        "    -webkit-text-fill-color: transparent;"
-        "    text-shadow: 0 0 40px rgba(168, 85, 247, 0.25);"
-        "    margin-bottom: 0.2rem;"
-        "    text-align: center;"
-        "}"
-        ".premium-subheader {"
-        "    font-size: 1.1rem;"
-        "    color: #94a3b8;"
-        "    text-align: center;"
-        "    margin-bottom: 2rem;"
-        "    font-weight: 300;"
-        "    letter-spacing: 0.05em;"
-        "}"
-        ".glass-card {"
-        "    background: var(--card-bg) !important;"
-        "    backdrop-filter: blur(12px);"
-        "    border: 1px solid var(--card-border) !important;"
-        "    border-radius: 16px;"
-        "    padding: 1.8rem;"
-        "    box-shadow: var(--card-shadow) !important;"
-        "    margin-bottom: 1.5rem;"
-        "    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
-        "}"
-        ".glass-card:hover {"
-        "    transform: translateY(-2px);"
-        "    border-color: rgba(168, 85, 247, 0.35) !important;"
-        "    box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.15) !important;"
-        "}"
-        "div[data-testid=\"stMetric\"] {"
-        "    background: var(--card-bg) !important;"
-        "    border: 1px solid var(--card-border) !important;"
-        "    border-radius: 12px;"
-        "    padding: 1rem;"
-        "    text-align: center;"
-        "    box-shadow: var(--card-shadow) !important;"
-        "}"
-        "div[data-testid=\"stMetricValue\"] {"
-        "    font-size: 2rem !important;"
-        "    font-weight: 700 !important;"
-        "    color: var(--text-color) !important;"
-        "}"
-        "div[data-testid=\"stMetricLabel\"] {"
-        "    font-size: 0.85rem !important;"
-        "    font-weight: 600 !important;"
-        "    text-transform: uppercase !important;"
-        "    letter-spacing: 0.08em !important;"
-        "    color: var(--text-color) !important;"
-        "    opacity: 0.6 !important;"
-        "}"
-        "div.stTextInput > div > div > input,"
-        "div.stTextArea > div > div > textarea,"
-        "div.stSelectbox > div > div > div,"
-        "div.stNumberInput > div > div > input,"
-        "div.stDateInput > div > div > input {"
-        "    border: 1px solid var(--card-border) !important;"
-        "    background-color: var(--secondary-background-color) !important;"
-        "    color: var(--text-color) !important;"
-        "    border-radius: 10px !important;"
-        "    transition: all 0.2s ease !important;"
-        "    padding: 0.5rem 1rem !important;"
-        "}"
-        "div.stTextInput > div > div > input:focus,"
-        "div.stTextArea > div > div > textarea:focus {"
-        "    border-color: #38bdf8 !important;"
-        "    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4) !important;"
-        "}"
-        "div[data-testid=\"stTabBar\"] {"
-        "    background: transparent !important;"
-        "    border: none !important;"
-        "    margin-bottom: 1.5rem;"
-        "}"
-        "button[data-testid=\"stTabBarTab\"] {"
-        "    font-family: 'Outfit', sans-serif;"
-        "    font-weight: 600;"
-        "    font-size: 0.95rem;"
-        "    color: var(--text-color) !important;"
-        "    background: transparent !important;"
-        "    opacity: 0.65;"
-        "    border-radius: 8px;"
-        "    padding: 0.5rem 1rem;"
-        "    transition: all 0.3s ease;"
-        "}"
-        "button[data-testid=\"stTabBarTab\"][aria-selected=\"true\"] {"
-        "    background: rgba(56, 189, 248, 0.15) !important;"
-        "    color: #38bdf8 !important;"
-        "    opacity: 1.0;"
-        "    text-shadow: 0 0 8px rgba(56, 189, 248, 0.3);"
-        "}"
-        "div.stButton > button {"
-        "    background: linear-gradient(135deg, #0284c7, #7c3aed) !important;"
-        "    color: white !important;"
-        "    border: none !important;"
-        "    font-weight: 600 !important;"
-        "    border-radius: 10px !important;"
-        "    padding: 0.75rem 2.2rem !important;"
-        "    transition: all 0.2s ease !important;"
-        "    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35) !important;"
-        "}"
-        "div.stButton > button:hover {"
-        "    transform: translateY(-1px);"
-        "    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.55) !important;"
-        "    background: linear-gradient(135deg, #0369a1, #6d28d9) !important;"
-        "}"
-        "::-webkit-scrollbar {"
-        "    width: 8px;"
-        "    height: 8px;"
-        "}"
-        "::-webkit-scrollbar-track {"
-        "    background: rgba(15, 23, 42, 0.3);"
-        "}"
-        "::-webkit-scrollbar-thumb {"
-        "    background: rgba(168, 85, 247, 0.4);"
-        "    border-radius: 4px;"
-        "}"
-        "::-webkit-scrollbar-thumb:hover {"
-        "    background: rgba(168, 85, 247, 0.6);"
-        "}"
-        ".custom-divider {"
-        "    height: 1px;"
-        "    background: linear-gradient(90deg, rgba(56,189,248,0), rgba(168,85,247,0.3) 50%, rgba(56,189,248,0));"
-        "    margin: 1.5rem 0;"
-        "}"
-        ".streamlit-expanderHeader {"
-        "    background: var(--card-bg) !important;"
-        "    border: 1px solid var(--card-border) !important;"
-        "    border-radius: 8px !important;"
-        "    color: var(--text-color) !important;"
-        "}"
-        "[data-testid=\"stSidebar\"] {"
-        "    background-color: var(--sidebar-bg) !important;"
-        "    border-right: 1px solid var(--sidebar-border) !important;"
-        "}"
-        "</style>",
+        f"<link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">"
+        f"<style>"
+        f":root {{"
+        f"    --card-bg: rgba(30, 41, 59, 0.45);"
+        f"    --card-border: rgba(255, 255, 255, 0.08);"
+        f"    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);"
+        f"    --sidebar-bg: #0f172a;"
+        f"    --sidebar-border: rgba(255, 255, 255, 0.08);"
+        f"    --text-color: #f8fafc;"
+        f"}}"
+        f"@media (prefers-color-scheme: light) {{"
+        f"    :root {{"
+        f"        --card-bg: rgba(255, 255, 255, 0.85);"
+        f"        --card-border: rgba(56, 189, 248, 0.15);"
+        f"        --card-shadow: 0 8px 32px 0 rgba(56, 189, 248, 0.05);"
+        f"        --sidebar-bg: #f8fafc;"
+        f"        --sidebar-border: rgba(56, 189, 248, 0.15);"
+        f"        --text-color: #0f172a;"
+        f"    }}"
+        f"}}"
+        f"[data-theme=\"light\"] {{"
+        f"    --card-bg: rgba(255, 255, 255, 0.85) !important;"
+        f"    --card-border: rgba(56, 189, 248, 0.15) !important;"
+        f"    --card-shadow: 0 8px 32px 0 rgba(56, 189, 248, 0.05) !important;"
+        f"    --sidebar-bg: #f8fafc !important;"
+        f"    --sidebar-border: rgba(56, 189, 248, 0.15) !important;"
+        f"    --text-color: #0f172a !important;"
+        f"}}"
+        f"[data-theme=\"dark\"] {{"
+        f"    --card-bg: rgba(30, 41, 59, 0.45) !important;"
+        f"    --card-border: rgba(255, 255, 255, 0.08) !important;"
+        f"    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;"
+        f"    --sidebar-bg: #0f172a !important;"
+        f"    --sidebar-border: rgba(255, 255, 255, 0.08) !important;"
+        f"    --text-color: #f8fafc !important;"
+        f"}}"
+        f"html, body, [class*=\"css\"] {{"
+        f"    font-family: 'Outfit', sans-serif;"
+        f"    color: var(--text-color) !important;"
+        f"}}"
+        f"@keyframes gradient-animation {{"
+        f"    0% {{ background-position: 0% 50%; }}"
+        f"    50% {{ background-position: 100% 50%; }}"
+        f"    100% {{ background-position: 0% 50%; }}"
+        f"}}"
+        f"@keyframes float-dna {{"
+        f"    0% {{ transform: translateY(0px) rotate(0deg); }}"
+        f"    50% {{ transform: translateY(-8px) rotate(10deg); }}"
+        f"    100% {{ transform: translateY(0px) rotate(0deg); }}"
+        f"}}"
+        f".hero-dna {{"
+        f"    font-size: 4.5rem;"
+        f"    display: inline-block;"
+        f"    animation: float-dna 4s ease-in-out infinite;"
+        f"    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6));"
+        f"    user-select: none;"
+        f"    margin-bottom: 0.5rem;"
+        f"}}"
+        f".premium-header {{"
+        f"    font-size: 2.8rem;"
+        f"    font-weight: 700;"
+        f"    background: linear-gradient(-45deg, #38bdf8, #a855f7, #ec4899, #38bdf8);"
+        f"    background-size: 300% 300%;"
+        f"    animation: gradient-animation 6s ease infinite;"
+        f"    -webkit-background-clip: text;"
+        f"    -webkit-text-fill-color: transparent;"
+        f"    text-shadow: 0 0 40px rgba(168, 85, 247, 0.25);"
+        f"    margin-bottom: 0.2rem;"
+        f"    text-align: center;"
+        f"}}"
+        f".premium-subheader {{"
+        f"    font-size: 1.1rem;"
+        f"    color: #94a3b8;"
+        f"    text-align: center;"
+        f"    margin-bottom: 2rem;"
+        f"    font-weight: 300;"
+        f"    letter-spacing: 0.05em;"
+        f"}}"
+        f".glass-card {{"
+        f"    background: var(--card-bg) !important;"
+        f"    backdrop-filter: blur(12px);"
+        f"    border: 1px solid var(--card-border) !important;"
+        f"    border-radius: 16px;"
+        f"    padding: 1.8rem;"
+        f"    box-shadow: var(--card-shadow) !important;"
+        f"    margin-bottom: 1.5rem;"
+        f"    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
+        f"}}"
+        f".glass-card:hover {{"
+        f"    transform: translateY(-2px);"
+        f"    border-color: rgba(168, 85, 247, 0.35) !important;"
+        f"    box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.15) !important;"
+        f"}}"
+        f"div[data-testid=\"stMetric\"] {{"
+        f"    background: var(--card-bg) !important;"
+        f"    border: 1px solid var(--card-border) !important;"
+        f"    border-radius: 12px;"
+        f"    padding: 1rem;"
+        f"    text-align: center;"
+        f"    box-shadow: var(--card-shadow) !important;"
+        f"}}"
+        f"div[data-testid=\"stMetricValue\"] {{"
+        f"    font-size: 2rem !important;"
+        f"    font-weight: 700 !important;"
+        f"    color: var(--text-color) !important;"
+        f"}}"
+        f"div[data-testid=\"stMetricLabel\"] {{"
+        f"    font-size: 0.85rem !important;"
+        f"    font-weight: 600 !important;"
+        f"    text-transform: uppercase !important;"
+        f"    letter-spacing: 0.08em !important;"
+        f"    color: var(--text-color) !important;"
+        f"    opacity: 0.6 !important;"
+        f"}}"
+        f"div.stTextInput > div > div > input,"
+        f"div.stTextArea > div > div > textarea,"
+        f"div.stSelectbox > div > div > div,"
+        f"div.stNumberInput > div > div > input,"
+        f"div.stDateInput > div > div > input {{"
+        f"    border: 1px solid var(--card-border) !important;"
+        f"    background-color: var(--secondary-background-color) !important;"
+        f"    color: var(--text-color) !important;"
+        f"    border-radius: 10px !important;"
+        f"    transition: all 0.2s ease !important;"
+        f"    padding: 0.5rem 1rem !important;"
+        f"}}"
+        f"div.stTextInput > div > div > input:focus,"
+        f"div.stTextArea > div > div > textarea:focus {{"
+        f"    border-color: #38bdf8 !important;"
+        f"    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4) !important;"
+        f"}}"
+        f"div[data-testid=\"stTabBar\"] {{"
+        f"    background: transparent !important;"
+        f"    border: none !important;"
+        f"    margin-bottom: 1.5rem;"
+        f"    overflow-x: auto !important;"
+        f"    display: flex !important;"
+        f"    flex-wrap: nowrap !important;"
+        f"    gap: 4px !important;"
+        f"}}"
+        f"div[data-testid=\"stTabBar\"]::-webkit-scrollbar {{"
+        f"    height: 6px !important;"
+        f"    display: block !important;"
+        f"}}"
+        f"div[data-testid=\"stTabBar\"]::-webkit-scrollbar-track {{"
+        f"    background: rgba(15, 23, 42, 0.15) !important;"
+        f"    border-radius: 3px !important;"
+        f"}}"
+        f"div[data-testid=\"stTabBar\"]::-webkit-scrollbar-thumb {{"
+        f"    background: rgba(168, 85, 247, 0.6) !important;"
+        f"    border-radius: 3px !important;"
+        f"}}"
+        f"div[data-testid=\"stTabBar\"] > div {{"
+        f"    display: flex !important;"
+        f"    flex-wrap: nowrap !important;"
+        f"}}"
+        f"button[data-testid=\"stTabBarTab\"] {{"
+        f"    font-family: 'Outfit', sans-serif;"
+        f"    font-weight: 600;"
+        f"    font-size: 0.8rem !important;"
+        f"    color: var(--text-color) !important;"
+        f"    background: transparent !important;"
+        f"    opacity: 0.65;"
+        f"    border-radius: 8px;"
+        f"    padding: 0.4rem 0.6rem !important;"
+        f"    transition: all 0.3s ease;"
+        f"    flex-shrink: 0 !important;"
+        f"    white-space: nowrap !important;"
+        f"}}"
+        f"button[data-testid=\"stTabBarTab\"][aria-selected=\"true\"] {{"
+        f"    background: rgba(56, 189, 248, 0.15) !important;"
+        f"    color: #38bdf8 !important;"
+        f"    opacity: 1.0;"
+        f"    text-shadow: 0 0 8px rgba(56, 189, 248, 0.3);"
+        f"}}"
+        f"div.stButton > button {{"
+        f"    background: linear-gradient(135deg, #0284c7, #7c3aed) !important;"
+        f"    color: white !important;"
+        f"    border: none !important;"
+        f"    font-weight: 600 !important;"
+        f"    border-radius: 10px !important;"
+        f"    padding: 0.75rem 2.2rem !important;"
+        f"    transition: all 0.2s ease !important;"
+        f"    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35) !important;"
+        f"}}"
+        f"div.stButton > button:hover {{"
+        f"    transform: translateY(-1px);"
+        f"    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.55) !important;"
+        f"    background: linear-gradient(135deg, #0369a1, #6d28d9) !important;"
+        f"}}"
+        f"::-webkit-scrollbar {{"
+        f"    width: 8px;"
+        f"    height: 8px;"
+        f"}}"
+        f"::-webkit-scrollbar-track {{"
+        f"    background: rgba(15, 23, 42, 0.3);"
+        f"}}"
+        f"::-webkit-scrollbar-thumb {{"
+        f"    background: rgba(168, 85, 247, 0.4);"
+        f"    border-radius: 4px;"
+        f"}}"
+        f"::-webkit-scrollbar-thumb:hover {{"
+        f"    background: rgba(168, 85, 247, 0.6);"
+        f"}}"
+        f".custom-divider {{"
+        f"    height: 1px;"
+        f"    background: linear-gradient(90deg, rgba(56,189,248,0), rgba(168,85,247,0.3) 50%, rgba(56,189,248,0));"
+        f"    margin: 1.5rem 0;"
+        f"}}"
+        f".streamlit-expanderHeader {{"
+        f"    background: var(--card-bg) !important;"
+        f"    border: 1px solid var(--card-border) !important;"
+        f"    border-radius: 8px !important;"
+        f"    color: var(--text-color) !important;"
+        f"}}"
+        f"[data-testid=\"stSidebar\"] {{"
+        f"    background-color: var(--sidebar-bg) !important;"
+        f"    border-right: 1px solid var(--sidebar-border) !important;"
+        f"}}"
+        f"</style>"
+        f"<script>"
+        f"    var root = window.parent.document.documentElement;"
+        f"    var currentRoot = window.document.documentElement;"
+        f"    root.setAttribute('data-theme', '{theme}');"
+        f"    currentRoot.setAttribute('data-theme', '{theme}');"
+        f"</script>",
         unsafe_allow_html=True,
     )
 
@@ -290,13 +342,41 @@ BUILD_MODE = "PRIVATE" if os.getenv("PRIVATE_DEMO_MODE", "").lower() == "true" e
 
 # ── Sidebar ───────────────────────────────────────────────────────────────
 
+# ── Sidebar ───────────────────────────────────────────────────────────────
+
+# Theme state
+if "theme" not in st.session_state:
+    st.session_state["theme"] = "dark"
+
 with st.sidebar:
-    st.markdown('<div style="text-align: center; margin-bottom: 1rem;"><span style="font-size: 3rem;">🧬</span></div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align: center; margin-bottom: 0.5rem;"><span style="font-size: 3rem;">🧬</span></div>', unsafe_allow_html=True)
     st.markdown('<h2 style="text-align: center; margin-top: 0px; color: var(--text-color); font-weight: 700; margin-bottom: 0px;">DecisionDNA AI</h2>', unsafe_allow_html=True)
-    st.markdown('<div style="text-align: center; font-size: 0.85rem; color: #38bdf8; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 1.5rem;">TEMPORAL DECISION FORENSICS</div>', unsafe_allow_html=True)
-    
+    st.markdown('<div style="text-align: center; font-size: 0.85rem; color: #38bdf8; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.3rem;">TEMPORAL DECISION FORENSICS</div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align: center; font-size: 0.7rem; color: var(--text-color); opacity: 0.4; margin-bottom: 1rem;">v1.0 · Built with Google Gemini & ADK</div>', unsafe_allow_html=True)
+
+    st.markdown(competition_badge(), unsafe_allow_html=True)
+
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    
+
+    # Theme toggle
+    theme_col1, theme_col2 = st.columns(2)
+    with theme_col1:
+        if st.button("☀️ Light", key="light_btn", use_container_width=True):
+            st.session_state["theme"] = "light"
+            st.rerun()
+    with theme_col2:
+        if st.button("🌙 Dark", key="dark_btn", use_container_width=True):
+            st.session_state["theme"] = "dark"
+            st.rerun()
+
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
+    # GitHub & YouTube links
+    st.markdown(github_button("https://github.com/sharath559/decision-dna-ai"), unsafe_allow_html=True)
+    st.markdown(youtube_button("https://youtu.be/Gr9pVMiKgGE"), unsafe_allow_html=True)
+
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
     if is_verified_author:
         st.markdown('<div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 0.6rem 1rem; text-align: center; margin-bottom: 1rem;">'
                     '<div style="font-size: 0.85rem; font-weight: 600; color: #10b981;">✨ Verified Original Creator</div>'
@@ -308,8 +388,7 @@ with st.sidebar:
                     f'<div style="font-size: 0.8rem; color: #a855f7;">Built by: {owner}</div>'
                     f'<div style="font-size: 0.75rem; color: var(--text-color); opacity: 0.7; margin-top: 2px;">Original: Sharath Chandra (@yakarasharath4)</div>'
                     f'</div>', unsafe_allow_html=True)
-                    
-    st.markdown(f"**Build Mode:** `{BUILD_MODE}`")
+
     st.caption("Synthetic Demo Only · No PHI")
     st.caption(f"Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}")
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
@@ -351,16 +430,14 @@ with st.sidebar:
 
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
-    st.markdown("### 🛡️ System Status")
-    col_status1, col_status2 = st.columns(2)
-    with col_status1:
-        st.markdown(f"**MCP Tools:** {status_pill('5 Active', '#38bdf8')}", unsafe_allow_html=True)
-        st.markdown(f"**Security Scan:** {status_pill('Enabled', '#10b981')}", unsafe_allow_html=True)
-    with col_status2:
-        st.markdown(f"**Genome Agents:** {status_pill('6 Active', '#a855f7')}", unsafe_allow_html=True)
-        st.markdown(f"**Audit Engine:** {status_pill('Online', '#10b981')}", unsafe_allow_html=True)
-
-    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+    with st.expander("🛡️ System Status"):
+        col_status1, col_status2 = st.columns(2)
+        with col_status1:
+            st.markdown(f"**MCP Tools:** {status_pill('5 Active', '#38bdf8')}", unsafe_allow_html=True)
+            st.markdown(f"**Security Scan:** {status_pill('Enabled', '#10b981')}", unsafe_allow_html=True)
+        with col_status2:
+            st.markdown(f"**Genome Agents:** {status_pill('6 Active', '#a855f7')}", unsafe_allow_html=True)
+            st.markdown(f"**Audit Engine:** {status_pill('Online', '#10b981')}", unsafe_allow_html=True)
 
     with st.expander("ℹ️ About DecisionDNA AI"):
         st.markdown(
@@ -670,6 +747,190 @@ def cached_analysis(case_id: str) -> dict:
     }
 
 
+# ── UI Landing & Value Helpers ────────────────────────────────────────────
+
+def render_hero_section():
+    st.markdown(
+        """
+        <div style="text-align: center; padding: 1.5rem 0 1rem 0;">
+            <div class="hero-dna">🧬</div>
+            <h1 class="premium-header" style="margin-top: 0.5rem; margin-bottom: 0rem;">DecisionDNA AI</h1>
+            <div class="premium-subheader" style="margin-bottom: 1.5rem;">
+                9 AI Agents &middot; 6 Decision Genes &middot; Forensic Audit in Seconds
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+def render_overview_tab(mr, case_meta, analysis):
+    st.markdown('<div style="padding:1.5rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🏠 System Overview & Value Proposition</h1>'
+                '<p style="color:var(--text-color);opacity:0.7;font-size:1.05rem;margin-top:0px;">How DecisionDNA AI is solving the $262B insurance claim denial problem</p></div>', unsafe_allow_html=True)
+    
+    # Value stat cards (Problem numbers)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(value_stat_card("$262 Billion", "Annual Denied Claims", "US Healthcare System Waste", "#ef4444"), unsafe_allow_html=True)
+    with col2:
+        st.markdown(value_stat_card("5 to 10 Hours", "Manual Audit Time", "Per disputed insurance decision today", "#f59e0b"), unsafe_allow_html=True)
+    with col3:
+        st.markdown(value_stat_card("< 3 Seconds", "DecisionDNA Audit Time", "9 cooperative agents mapping genomes", "#10b981"), unsafe_allow_html=True)
+
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
+    # Problem Statement / Story
+    st.markdown("### ⚠️ The Problem: Why Healthcare Auditing is Broken Today")
+    st.markdown(
+        "When a healthcare insurer changes a prior authorization decision or denies a claim, patients, providers, "
+        "and compliance teams face a silent operational nightmare. Determining **why** a decision changed requires "
+        "cross-referencing at least **3 to 5 siloed systems** (contract rosters, policy documents, business rules engine, "
+        "and clinical evidence logs). This manual process takes hours, leading to massive administrative backlogs, "
+        "denial appeal delays, and provider burnout."
+    )
+    
+    # Solves It Table
+    st.markdown("### 🧬 How DecisionDNA AI Solves It")
+    st.markdown(
+        "By modeling clinical guidelines, provider contract logic, rules, and patient documents into a **Pydantic-validated "
+        "Decision Genome**, the system can instantly compare two snapshots in time, detect decision mutations, and "
+        "explain the root cause in plain English using a multi-agent framework."
+    )
+
+    st.markdown(
+        """
+        <table style="width:100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; border: 1px solid var(--card-border);">
+            <thead>
+                <tr style="background: rgba(124, 58, 237, 0.1); border-bottom: 2px solid var(--card-border);">
+                    <th style="padding: 10px; text-align: left;">Audit Step</th>
+                    <th style="padding: 10px; text-align: left;">What Happens Today (Manual Audit)</th>
+                    <th style="padding: 10px; text-align: left;">Time Required</th>
+                    <th style="padding: 10px; text-align: left;">DecisionDNA AI Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">1. Detect Drift</td>
+                    <td style="padding: 10px;">Auditor manually flags when outcome changes (APPROVED ➔ DENIED)</td>
+                    <td style="padding: 10px; color: #ef4444;">Minutes</td>
+                    <td style="padding: 10px; font-weight: 600; color: #10b981;">Automated temporal comparison</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">2. Gather Data</td>
+                    <td style="padding: 10px;">Query policy DB, contract system, rules engine, document vault, provider roster</td>
+                    <td style="padding: 10px; color: #ef4444;">2 - 4 hours</td>
+                    <td style="padding: 10px; font-weight: 600; color: #10b981;">Instant hydration via MCP tools</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">3. Version Compare</td>
+                    <td style="padding: 10px;">Read and compare PDFs/text lines of contracts, medical policies, and rule changes</td>
+                    <td style="padding: 10px; color: #ef4444;">1 - 2 hours</td>
+                    <td style="padding: 10px; font-weight: 600; color: #10b981;">Decision Genome structure diffing</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">4. Diagnose Cause</td>
+                    <td style="padding: 10px;">Determine which specific update caused the decision to flip</td>
+                    <td style="padding: 10px; color: #ef4444;">30 min - 1 hour</td>
+                    <td style="padding: 10px; font-weight: 600; color: #10b981;">Cooperative agents isolate gene mutation</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">5. Generate Report</td>
+                    <td style="padding: 10px;">Write compliance report explaining changes to regulators or patients</td>
+                    <td style="padding: 10px; color: #ef4444;">1 - 2 hours</td>
+                    <td style="padding: 10px; font-weight: 600; color: #10b981;">Auto-generated audit report export</td>
+                </tr>
+                <tr style="background: rgba(16, 185, 129, 0.05);">
+                    <td style="padding: 10px; font-weight: 700;">Total Time</td>
+                    <td style="padding: 10px; font-weight: 700; color: #ef4444;">5 - 10 hours per case</td>
+                    <td style="padding: 10px; font-weight: 700; color: #ef4444;">5 - 10 hours</td>
+                    <td style="padding: 10px; font-weight: 700; color: #10b981;">&lt; 3 seconds (10,000x faster)</td>
+                </tr>
+            </tbody>
+        </table>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
+    # Why 9 Agents
+    st.markdown("### 🤖 Why 9 Specialized AI Agents?")
+    st.markdown(
+        "Unlike standard chatbot wrappers that feed all data into one giant prompt, DecisionDNA AI uses **9 specialized "
+        "agents**. This architecture reflects actual enterprise insurance workflows and provides major technical advantages:"
+    )
+    
+    st.markdown(
+        "1. **Hallucination Mitigation**: Each agent focuses solely on one data type (e.g. Policy, Contract, or Network). They are restricted to a single domain, which drastically reduces the risk of generating false connections.\n"
+        "2. **Strict Separation of Concerns**: In production, different enterprise teams own different systems. The `ContractGenomeAgent` interacts with the Contract MCP, while the `PolicyGenomeAgent` checks medical policies. They don't mix scopes.\n"
+        "3. **HIPAA & CMS Regulatory Compliance**: Healthcare audits require that each decision factor be independently auditable. A black-box monolithic LLM cannot explain which specific system triggered a denial. 9 agents produce 9 independent, verifiable traces.\n"
+        "4. **Modular Composability**: Need to support another Coverage Gene? You just add a new Genome Agent and plug it into the orchestration pipeline without rewriting any of the core prompts."
+    )
+
+    st.markdown("### 📋 Agent Value Map")
+    st.markdown(
+        """
+        <table style="width:100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; border: 1px solid var(--card-border);">
+            <thead>
+                <tr style="background: rgba(56, 189, 248, 0.1); border-bottom: 2px solid var(--card-border);">
+                    <th style="padding: 10px; text-align: left;">Agent</th>
+                    <th style="padding: 10px; text-align: left;">Insurance Problem Solved</th>
+                    <th style="padding: 10px; text-align: left;">Without It (Manual Process)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">📜 PolicyGenomeAgent</td>
+                    <td style="padding: 10px;">Detects when medical necessity guidelines change between policy versions</td>
+                    <td style="padding: 10px;">Manual PDF comparison (2+ hours of expert reading)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">📋 ContractGenomeAgent</td>
+                    <td style="padding: 10px;">Identifies changes in provider contracts, network statuses, or fee structures</td>
+                    <td style="padding: 10px;">Phone calls or manual DB lookup (1+ hour)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">⚙️ RuleGenomeAgent</td>
+                    <td style="padding: 10px;">Checks validation rules failed in new decisions vs passed in old ones</td>
+                    <td style="padding: 10px;">IT support tickets to rules engine developer (days)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">📄 DocumentationGenomeAgent</td>
+                    <td style="padding: 10px;">Validates clinical document requirements (required vs. submitted check)</td>
+                    <td style="padding: 10px;">Manual checklist check (30+ min)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">🌐 NetworkGenomeAgent</td>
+                    <td style="padding: 10px;">Detects when a provider or facility shifts in/out of participation rosters</td>
+                    <td style="padding: 10px;">Cross-referencing network Excel rosters (1+ hour)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">🔬 MutationDetectionAgent</td>
+                    <td style="padding: 10px;">Aggregates all 5 gene findings into a weighted mutation score</td>
+                    <td style="padding: 10px;">Subjective expert opinion (inconsistent, error-prone)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">📈 ImpactAgent</td>
+                    <td style="padding: 10px;">Estimates population scale operational impact and financial risks</td>
+                    <td style="padding: 10px;">Actuarial analysis requests (days to weeks)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">🛡️ SecurityAgent</td>
+                    <td style="padding: 10px;">Blocks prompt injection, PII leaks, and unauthorized instruction tampering</td>
+                    <td style="padding: 10px;">Severe compliance and security exposure</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">📋 AuditAgent</td>
+                    <td style="padding: 10px;">Generates regulatory-compliant audit summary reports</td>
+                    <td style="padding: 10px;">Manual executive report drafting (1-2 hours)</td>
+                </tr>
+            </tbody>
+        </table>
+        """,
+        unsafe_allow_html=True
+    )
+
+
 # ── Load Analysis ─────────────────────────────────────────────────────────
 
 analysis = None
@@ -688,9 +949,13 @@ else:
 mr = analysis["mutation_report"]
 case_meta = analysis["case_meta"]
 
+# Render premium hero branding header at the very top of the page
+render_hero_section()
+
 # ── Tabs ──────────────────────────────────────────────────────────────────
 
 tabs = st.tabs([
+    "🏠 Overview",
     "📊 Dashboard",
     "🔎 Case Explorer",
     "🧬 Decision DNA",
@@ -704,14 +969,18 @@ tabs = st.tabs([
 ])
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 0: Dashboard
-# ─────────────────────────────────────────────────────────────────────────
-
-# ─────────────────────────────────────────────────────────────────────────
-# TAB 0: Dashboard
+# TAB 0: Overview
 # ─────────────────────────────────────────────────────────────────────────
 
 with tabs[0]:
+    render_overview_tab(mr, case_meta, analysis)
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# TAB 1: Dashboard
+# ─────────────────────────────────────────────────────────────────────────
+
+with tabs[1]:
     st.markdown('<div style="padding:1.5rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">Forensic Analytics Dashboard</h1>'
                 '<p style="color:var(--text-color);opacity:0.7;font-size:1.05rem;margin-top:0px;">Real-time decision drift tracking and mutation analysis</p></div>', unsafe_allow_html=True)
 
@@ -838,10 +1107,10 @@ with tabs[0]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 1: Case Explorer
+# TAB 2: Case Explorer
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[1]:
+with tabs[2]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">Forensic Case Explorer</h1>'
                 '<p style="color:#94a3b8;font-size:1.05rem;margin-top:0px;">Explore and inspect preloaded audit cases and custom scenarios</p></div>', unsafe_allow_html=True)
                 
@@ -899,10 +1168,10 @@ with tabs[1]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 2: Decision DNA View (side by side)
+# TAB 3: Decision DNA View (side by side)
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[2]:
+with tabs[3]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🧬 Decision DNA — Genome Comparison</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
                 
@@ -976,10 +1245,10 @@ with tabs[2]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 3: Mutation Analysis
+# TAB 4: Mutation Analysis
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[3]:
+with tabs[4]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🔬 Forensic Mutation Engine</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
 
@@ -1080,10 +1349,10 @@ with tabs[3]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 4: Timeline
+# TAB 5: Timeline
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[4]:
+with tabs[5]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">📅 Forensic Decision Timeline</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
 
@@ -1143,10 +1412,10 @@ with tabs[4]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 5: Evidence & Missing Documents
+# TAB 6: Evidence & Missing Documents
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[5]:
+with tabs[6]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">📄 Evidence & Clinical Documentation</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
 
@@ -1201,10 +1470,10 @@ with tabs[5]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 6: Security Review
+# TAB 7: Security Review
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[6]:
+with tabs[7]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🛡️ Forensic Security Gateway</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
 
@@ -1279,10 +1548,10 @@ with tabs[6]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 7: MCP Tools
+# TAB 8: MCP Tools
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[7]:
+with tabs[8]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🔧 Model Context Protocol (MCP) Tools</h1>'
                 '<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Standardized tool registry representing external data source gateways</p></div>', unsafe_allow_html=True)
                 
@@ -1328,12 +1597,15 @@ with tabs[7]:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 8: Agent Architecture
+# TAB 9: Agent Architecture
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[8]:
+with tabs[9]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">🤖 Multi-Agent Orchestration Architecture</h1>'
                 '<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">9 specialized cooperative AI agents running a sequential forensic analysis pipeline</p></div>', unsafe_allow_html=True)
+
+    # Visual HTML Ingestion Flow
+    st.markdown(architecture_flow_html(), unsafe_allow_html=True)
 
     st.markdown('<div class="glass-card" style="margin-bottom:1.5rem;">'
                 '<h3 style="color:#a855f7;margin-top:0px;margin-bottom:0.6rem;">💡 Why Multi-Agent Systems?</h3>'
@@ -1343,20 +1615,6 @@ with tabs[8]:
                 'This reduces LLM hallucination and improves forensic report accuracy.'
                 '</p>'
                 '</div>', unsafe_allow_html=True)
-
-    st.markdown("### Forensic Orchestration Flow")
-    st.code(
-        " ┌────────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐\n"
-        " │ User / API     │ ──> │ Security     │ ──> │ MCP Tools    │ ──> │ Genome       │\n"
-        " │ Case Snapshot  │     │ Guardrail    │     │ Hydration    │     │ Agents (x6)  │\n"
-        " └────────────────┘     └──────────────┘     └──────────────┘     └──────┬───────┘\n"
-        "                                                                         │\n"
-        " ┌────────────────┐     ┌──────────────┐     ┌──────────────┐            │\n"
-        " │ Executive      │ <── │ Audit        │ <── │ Impact       │ <──────────┘\n"
-        " │ Audit Report   │     │ Report Agent │     │ Assessment   │\n"
-        " └────────────────┘     └──────────────┘     └──────────────┘",
-        language="text"
-    )
 
     st.markdown("### Agent Directory")
     col_a1, col_a2, col_a3 = st.columns(3)
@@ -1379,12 +1637,59 @@ with tabs[8]:
         st.markdown(agent_card("Impact Assessment", "📈", "Models risk levels and population scale operational impact.", "Active"), unsafe_allow_html=True)
         st.markdown(agent_card("Audit Report Agent", "📋", "Synthesizes final forensic reports and executive summaries.", "Active"), unsafe_allow_html=True)
 
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
+    st.markdown("### 🔮 Enterprise Vision & Future Agents")
+    st.markdown(
+        "To scale this system into a multi-billion dollar healthcare network, we designed a modular blueprint. "
+        "Adding coverage domains is as simple as dropping in new gene-specific agents. Here is our product roadmap:"
+    )
+    st.markdown(
+        """
+        <table style="width:100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; border: 1px solid var(--card-border);">
+            <thead>
+                <tr style="background: rgba(168, 85, 247, 0.1); border-bottom: 2px solid var(--card-border);">
+                    <th style="padding: 10px; text-align: left; color:#a855f7;">Future Agent</th>
+                    <th style="padding: 10px; text-align: left; color:#a855f7;">Purpose & Scope</th>
+                    <th style="padding: 10px; text-align: left; color:#a855f7;">Enterprise Integration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">💊 FormularyGenomeAgent</td>
+                    <td style="padding: 10px;">Detects drug formulary tier updates, exclusions, and prior auth requirement drift</td>
+                    <td style="padding: 10px; font-family: monospace;">RxNorm / Formulary Registry API</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">🩺 ClinicalGenomeAgent</td>
+                    <td style="padding: 10px;">Compares EHR clinical evidence (lab values, diagnoses, vital signs) over time</td>
+                    <td style="padding: 10px; font-family: monospace;">HL7 FHIR API (Epic, Cerner)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">⚖️ ComplianceAgent</td>
+                    <td style="padding: 10px;">Validates identified mutations against CMS national coverage guidelines and state rules</td>
+                    <td style="padding: 10px; font-family: monospace;">CMS Regulations Database / API</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--card-border);">
+                    <td style="padding: 10px; font-weight: 600;">✉️ AppealsAgent</td>
+                    <td style="padding: 10px;">Auto-generates custom, legally-defensible appeal letters for denied cases</td>
+                    <td style="padding: 10px; font-family: monospace;">CRM & Appeals Workflow Queue</td>
+                </tr>
+            </tbody>
+        </table>
+        """,
+        unsafe_allow_html=True
+    )
+    
+    st.markdown("**Enterprise Orchestration Pipeline:**")
+    st.info("EHR Ingestion (Epic/FHIR) ➔ Event Bus ➔ HIPAA/Security Guardrail ➔ MCP Data Hydration ➔ Parallel Genome Agents ➔ Root Cause Mutation Detection ➔ Impact/Compliance Assessment ➔ Auto-Generated Appeals / EHR Webhooks.")
+
 
 # ─────────────────────────────────────────────────────────────────────────
-# TAB 9: Audit Report
+# TAB 10: Audit Report
 # ─────────────────────────────────────────────────────────────────────────
 
-with tabs[9]:
+with tabs[10]:
     st.markdown('<div style="padding:1rem 0px;"><h1 style="background:linear-gradient(135deg, #38bdf8, #a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:2.2rem;margin-bottom:0.5rem;">📋 Executive Audit Report</h1>'
                 f'<p style="color:var(--text-color);opacity:0.6;font-size:1.05rem;margin-top:0px;">Active Case: {analysis["old_genome"]["case_id"]}</p></div>', unsafe_allow_html=True)
 
