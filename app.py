@@ -373,7 +373,7 @@ with st.sidebar:
 
     # GitHub & YouTube links
     st.markdown(github_button("https://github.com/sharath559/decision-dna-ai"), unsafe_allow_html=True)
-    st.markdown(youtube_button("https://youtu.be/Gr9pVMiKgGE"), unsafe_allow_html=True)
+    st.markdown(youtube_button("https://www.youtube.com/watch?v=piHUf5LIgjY&t=2s"), unsafe_allow_html=True)
 
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 
