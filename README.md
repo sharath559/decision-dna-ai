@@ -94,32 +94,123 @@ A single monolithic LLM prompt cannot solve decision drift without massive hallu
 
 ---
 
-## 🏗️ Architecture & Forensic Orchestration Pipeline
+## 🏗️ Advanced Architecture & Forensic Orchestration Pipeline
+
+The platform is designed around a decoupled, pipeline-oriented multi-agent pattern. Rather than using a monolithic LLM prompt that struggles with context limit fragmentation, DecisionDNA partitions decision states into distinct genes, which are analyzed in parallel by cooperative agents before final synthesis.
 
 ```mermaid
 graph TD
-    A["User / Streamlit UI"] --> B["Mutation Engine<br/>(Orchestrator)"]
-    B --> C["PolicyGenomeAgent"]
-    B --> D["ContractGenomeAgent"]
-    B --> E["RuleGenomeAgent"]
-    B --> F["DocumentationGenomeAgent"]
-    B --> G["NetworkGenomeAgent"]
-    C --> H["PolicyMCP Tool"]
-    D --> I["ContractMCP Tool"]
-    E --> J["RulesMCP Tool"]
-    F --> K["DocumentationMCP Tool"]
-    B --> L["MutationDetectionAgent"]
-    L --> M["ImpactAgent"]
-    B --> N["SecurityAgent"]
-    B --> O["AuditAgent"]
-    O --> P["AuditMCP Tool"]
-    H --> Q["Local JSON Data"]
-    I --> Q
-    J --> Q
-    K --> Q
-    P --> Q
-    Q --> R["Forensic Timeline / Report"]
+    %% Nodes
+    subgraph IngestionLayer["1. Ingestion & Security Perimeter"]
+        A["EHR / Claims Event Influx<br/>(FHIR/Epic Triggers)"] --> B["SecurityAgent<br/>🛡️ Semantic Firewall"]
+    end
+
+    subgraph HydrationLayer["2. Data Hydration & MCP Gateway"]
+        B --> C["Orchestration Engine<br/>(Mutation Engine)"]
+        C --> D1["PolicyMCP Tool"]
+        C --> D2["ContractMCP Tool"]
+        C --> D3["RulesMCP Tool"]
+        C --> D4["DocMCP Tool"]
+        C --> D5["NetworkMCP Tool"]
+    end
+
+    subgraph AlignmentLayer["3. Decision Genome Construction"]
+        D1 --> E1["Before Genome Snapshot<br/>(t1: Baseline State)"]
+        D2 --> E1
+        D3 --> E1
+        D4 --> E1
+        D5 --> E1
+        
+        D1 --> E2["After Genome Snapshot<br/>(t2: Current State)"]
+        D2 --> E2
+        D3 --> E2
+        D4 --> E2
+        D5 --> E2
+    end
+
+    subgraph AgentCore["4. Decentralized Cooperative Agent Hub"]
+        E1 --> F1["PolicyGenomeAgent"]
+        E2 --> F1
+        
+        E1 --> F2["ContractGenomeAgent"]
+        E2 --> F2
+        
+        E1 --> F3["RuleGenomeAgent"]
+        E2 --> F3
+        
+        E1 --> F4["DocGenomeAgent"]
+        E2 --> F4
+        
+        E1 --> F5["NetworkGenomeAgent"]
+        E2 --> F5
+    end
+
+    subgraph AnalyticsCore["5. Forensic Mutation Analysis Engine"]
+        F1 --> G["MutationDetectionAgent<br/>🔬 Core Synthesizer"]
+        F2 --> G
+        F3 --> G
+        F4 --> G
+        F5 --> G
+        
+        G --> H["ImpactAgent<br/>📈 Risk & Financial Forecaster"]
+    end
+
+    subgraph OutputLayer["6. Compliance Ledger & UI Delivery"]
+        G --> I["AuditAgent<br/>📋 Report Generator"]
+        H --> I
+        I --> J["AuditMCP Storage"]
+        I --> K["Interactive Dashboard<br/>& PDF/JSON Exporters"]
+    end
+
+    %% Styles
+    classDef default fill:#0f172a,stroke:#1e293b,color:#f8fafc;
+    classDef security fill:#7f1d1d,stroke:#b91c1c,color:#fef2f2;
+    classDef hydration fill:#0c4a6e,stroke:#0284c7,color:#f0f9ff;
+    classDef genome fill:#0f766e,stroke:#0d9488,color:#f0fdfa;
+    classDef agent fill:#581c87,stroke:#7e22ce,color:#faf5ff;
+    classDef analytics fill:#7c2d12,stroke:#c2410c,color:#fff7ed;
+    classDef output fill:#14532d,stroke:#15803d,color:#f0fdf4;
+
+    class B security;
+    class D1,D2,D3,D4,D5 hydration;
+    class E1,E2 genome;
+    class F1,F2,F3,F4,F5 agent;
+    class G,H analytics;
+    class I,J,K output;
 ```
+
+### 🧬 The Mathematical Model of Decision Genomes
+
+To evaluate decision changes with clinical precision, we represent a decision at any point in time as a **Decision Genome vector ($G$)** composed of 6 discrete genes:
+
+$$G = [G_{policy}, G_{contract}, G_{rule}, G_{doc}, G_{network}, G_{evidence}]$$
+
+Where:
+- $G_{policy} (P)$: The governing coverage guideline and policy clauses.
+- $G_{contract} (C)$: The billing provider contract enrollment and roster status.
+- $G_{rule} (R)$: The business rules logic validating eligibility fields.
+- $G_{doc} (D)$: The required checklists and submitted clinical files.
+- $G_{network} (N)$: The provider network participation roster standing.
+- $G_{evidence} (E)$: Supporting and contradicting clinical findings in medical charts.
+
+#### The Mutation Operator ($\Delta$)
+A **decision mutation** occurs when the state of any gene changes between the baseline timestamp ($t_1$) and the current evaluation timestamp ($t_2$). The mutation score ($M$) is calculated as a weighted sum of the individual gene mutation severities:
+
+$$M = \min\left(100, \sum_{i \in \text{Genes}} w_i \cdot S(G_i^{t_1}, G_i^{t_2})\right)$$
+
+Where:
+- $w_i$ represents the domain weight of the gene (reflecting its operational priority in prior auth and claim audits):
+  - $w_{policy} = 35$ (Clinical necessity policy is the dominant factor)
+  - $w_{contract} = 20$ (Billing eligibility)
+  - $w_{rule} = 20$ (Eligibility logic validation)
+  - $w_{doc} = 15$ (Evidence compliance checklist)
+  - $w_{network} = 10$ (Roster participation)
+- $S(G_i^{t_1}, G_i^{t_2}) \in [0, 1]$ represents the normalized mutation severity index classified by each specialized agent:
+  - $0.0$: No state change (stable gene)
+  - $0.25$: Metadata updates (low severity)
+  - $0.50$: Minor rule updates (medium severity)
+  - $0.75$: Structural additions / failed validations (high severity)
+  - $1.0$: Critical terminations / deleted coverage clauses (critical severity)
 
 ---
 
