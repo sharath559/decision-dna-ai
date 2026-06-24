@@ -1,0 +1,69 @@
+name: CI/CD Pipeline - DecisionDNA AI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run Forensic Evals & Unit Tests
+        run: |
+          python -m unittest discover -s tests
+
+  deploy:
+    name: Deploy to Google Cloud Run
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker Auth
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_NAME="us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/decision-dna-repo/decision-dna-ai:latest"
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: decision-dna-ai
+          image: us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/decision-dna-repo/decision-dna-ai:latest
+          region: us-east1
+          flags: "--allow-unauthenticated"

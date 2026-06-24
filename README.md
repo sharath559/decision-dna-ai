@@ -23,6 +23,8 @@ To facilitate automated grading and human review for the **Kaggle x Google Gemin
 | **5. Production Integration Specs** | Includes verified code blueprints for the `google-genai` Python SDK & `gemini-2.0-flash`. | Blueprints in [Production Architecture](#-production-architecture--google-gemini-integration-blueprint) |
 | **6. Security & Guardrails** | Built-in semantic firewall for prompt injection, HIPAA compliance, and PII redaction. | Details in [Security Features](#security-features) & [security_agent.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/src/agents/security_agent.py) |
 | **7. Originality & Authorship** | Features a local cryptographic signature verification engine for originality verification. | Signature in [scripts/generate_project_signature.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/scripts/generate_project_signature.py) |
+| **8. Automated Quality Testing** | Automated test suite verifying schema contracts, mutation math, security blocks, and tool diffs. | Implementation in [tests/test_genome_forensics.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/tests/test_genome_forensics.py) |
+| **9. Continuous Deployment (CI/CD)** | GitHub Actions blueprint for continuous linting, automated testing, and automated Cloud Run deployment. | Blueprint in [.github/workflows/deploy.yml](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/.github/workflows/deploy.yml) |
 
 ---
 
@@ -218,6 +220,12 @@ Where:
 
 Vibe coding is excellent for rapid prototyping, but building enterprise-grade, compliance-heavy healthcare software requires rigorous software engineering. Below are the design decisions, data structures, and architectural trade-offs that make DecisionDNA AI robust and production-ready:
 
+> [!NOTE]
+> **State Space Partitioning** keeps the multi-agent context small and isolated. Instead of feeding all data into one prompt, which causes attention drift and high token consumption, we partition the audit space into 6 discrete "decision genes" analyzed in parallel.
+
+> [!IMPORTANT]
+> **Runtime Integrity & Contracts** are strictly enforced. All agents and MCP tool server endpoints exchange data using Pydantic v2 schemas (`BaseModel`). Any mismatch triggers automatic validation errors at run-time, protecting downstream databases and UIs from malformed data.
+
 ### 1. State Space Partitioning: The Decision Genome Pattern
 *   **The Monolithic Prompt Failure:** Standard AI architectures feed all context (hundreds of pages of medical guidelines, contract terms, rules, and patient documents) into a single LLM prompt. This results in **attention cross-contamination** (e.g., the model mistakenly uses network terms from the contract to evaluate a clinical policy clause) and increases token costs exponentially.
 *   **Our Approach:** We partition the state space into 6 independent variables ("genes") modeled as a vector:
@@ -391,6 +399,34 @@ Start the Streamlit dev server:
 streamlit run app.py
 ```
 The application will open automatically in your browser at `http://localhost:8501`.
+
+---
+
+## 🧪 Automated Quality & Regression Testing
+
+To ensure the decision genome mathematical scoring and Pydantic validation contracts remain robust against prompt drift or code updates, the project includes an automated unit test suite.
+
+### Running the Test Suite
+Run the tests using Python's standard library test runner:
+```bash
+python tests/test_genome_forensics.py
+```
+*(Alternatively, you can run them using `pytest tests/`)*
+
+### What the Tests Verify:
+1. **Schema Validation (`TestDecisionGenomeSchemas`):** Ensures that inputs missing critical keys fail immediately with Pydantic `ValidationError`.
+2. **Mutation Forensics Math (`TestMutationForensicEngine`):** Verifies that the parallel agent calculations properly aggregate, weigh, and cap the decision Mutation Score (out of 100) and identify primary/secondary mutation sources.
+3. **Semantic Firewall Guardrails (`TestSecurityAgent`):** Validates that prompt injections are blocked (`allowed=False`) and PII patterns (SSNs, emails) are redacted to preserve HIPAA compliance.
+4. **MCP Tool Integrations (`TestMCPTools`):** Tests that policy and contract diffing logic operates correctly.
+
+---
+
+## 🚀 Production CI/CD Pipeline Blueprint
+
+The project is equipped with a complete GitHub Actions configuration file at `.github/workflows/deploy.yml` that establishes a production delivery pipeline:
+
+1. **Continuous Integration (CI):** On every push or pull request to `main`, a runner spins up, installs dependencies, and runs the entire automated unit test suite.
+2. **Continuous Deployment (CD) to Google Cloud Run:** Upon successful tests, it authenticates with Google Cloud, builds a Docker image using the root `Dockerfile`, pushes it to Google Artifact Registry, and deploys it to **Google Cloud Run** in `us-east1` with unauthenticated access enabled.
 
 ---
 
