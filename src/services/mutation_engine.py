@@ -1,5 +1,4 @@
-"""
-DecisionDNA AI — Mutation Engine Service
+"""DecisionDNA AI — Mutation Engine Service
 
 Orchestrates the multi-agent analysis pipeline:
   1. Load genome pair
@@ -8,8 +7,15 @@ Orchestrates the multi-agent analysis pipeline:
   4. Compute impact via ImpactAgent
   5. Run security scan
   6. Generate audit report
+  7. (Optional) Enhance narratives via Gemini 2.0 Flash
 
 Provides the top-level ``run_full_analysis`` function.
+
+Gemini Integration:
+    When GOOGLE_API_KEY is set and MOCK_MODE is false, the engine
+    uses Gemini 2.0 Flash to generate richer root cause narratives
+    and executive summaries. Otherwise, deterministic Python logic
+    is used for full reproducibility.
 """
 
 from __future__ import annotations
@@ -136,6 +142,15 @@ def run_analysis_for_pair(
 ) -> dict[str, Any]:
     """
     Run the multi-agent decision forensics analysis on a custom genome pair.
+
+    Pipeline:
+        1. Detect gene-level mutations (5 parallel genome agents)
+        2. Aggregate into scored MutationReport
+        3. (Gemini) Enhance root cause narrative via LLM
+        4. Compute impact assessment
+        5. Security scan on original input
+        6. (Gemini) Generate executive summary via LLM
+        7. Compile final audit report
     """
     # 1. Detect gene-level mutations
     gene_mutations = detect_mutations(old_genome, new_genome)
@@ -143,24 +158,63 @@ def run_analysis_for_pair(
     # 2. Aggregate into mutation report
     mutation_report = calculate_mutation_score(old_genome, new_genome, gene_mutations)
 
-    # 3. Impact assessment
+    # 3. (Gemini Enhancement) Enhance root cause narrative via LLM
+    try:
+        from src.agents.gemini_integration import generate_root_cause_narrative
+
+        gene_summary = "\n".join(
+            f"- {gm.gene_name}: {'MUTATED' if gm.mutated else 'STABLE'} "
+            f"(severity={gm.severity}) — {gm.details.splitlines()[0]}"
+            for gm in gene_mutations
+        )
+        gemini_root_cause = generate_root_cause_narrative(
+            case_id=mutation_report.case_id,
+            old_decision=mutation_report.old_decision,
+            new_decision=mutation_report.new_decision,
+            gene_mutations_summary=gene_summary,
+            mutation_score=mutation_report.mutation_score,
+        )
+        if gemini_root_cause is not None:
+            mutation_report.root_cause = gemini_root_cause.root_cause_narrative
+            mutation_report.recommendation = " ".join(
+                gemini_root_cause.recommended_actions
+            )
+    except Exception:
+        pass  # Graceful fallback to deterministic root cause
+
+    # 4. Impact assessment
     impact = _impact_agent.analyze(
         mutation_report=mutation_report,
         decision_type=case_meta.get("decision_type", ""),
     )
 
-    # 4. Security scan on original input
+    # 5. Security scan on original input
     security = scan_security_risks(
         case_meta.get("description", old_genome.case_id)
     )
 
-    # 5. Audit report
+    # 6. Audit report
     audit_report = generate_audit_report(
         mutation_report=mutation_report,
         impact=impact,
         security=security,
         case_meta=case_meta,
     )
+
+    # 7. (Gemini Enhancement) Enhance executive summary via LLM
+    try:
+        from src.agents.gemini_integration import generate_executive_summary
+
+        gemini_summary = generate_executive_summary(
+            case_id=audit_report.case_id,
+            mutation_summary=mutation_report.root_cause,
+            impact_summary=impact.operational_impact,
+            security_status=audit_report.security_status,
+        )
+        if gemini_summary is not None:
+            audit_report.executive_summary = gemini_summary.executive_summary
+    except Exception:
+        pass  # Graceful fallback to deterministic summary
 
     return {
         "old_genome": old_genome,

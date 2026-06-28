@@ -1,12 +1,16 @@
 # DecisionDNA AI
 
-> **Temporal Decision Forensics for Healthcare Networks — Powered by a Multi-Agent Architecture**
+> **Temporal Decision Forensics for Healthcare Networks — Powered by Google Gemini 2.0 Flash, ADK, and a 9-Agent Multi-Agent Architecture**
 
-[![Kaggle Competition](https://img.shields.io/badge/Kaggle%20%C3%97%20Google%20Gemini-AI%20Agent%20Competition%202025-blueviolet?style=for-the-badge)](https://www.kaggle.com/competitions)
+[![Kaggle Competition](https://img.shields.io/badge/Kaggle%20×%20Google%20Gemini-AI%20Agent%20Competition%202025-blueviolet?style=for-the-badge)](https://www.kaggle.com/competitions)
 [![Build Mode](https://img.shields.io/badge/Build-Public%20Demo-emerald?style=for-the-badge)](https://github.com/sharath559/decision-dna-ai)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue?style=for-the-badge)](https://www.python.org/)
+[![Gemini](https://img.shields.io/badge/Google-Gemini%202.0%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![ADK](https://img.shields.io/badge/Google-ADK%20Agents-34A853?style=for-the-badge&logo=google&logoColor=white)](https://adk.dev/)
 
-DecisionDNA AI is an enterprise-grade temporal decision forensics platform for healthcare networks. It reconstructs why clinical and administrative decisions drift or change over time by modeling decision factors into a structured, Pydantic-validated **Decision Genome** and auditing mutations using a multi-agent framework.
+DecisionDNA AI is an enterprise-grade temporal decision forensics platform for healthcare networks. It reconstructs why clinical and administrative decisions drift or change over time by modeling decision factors into a structured, Pydantic-validated **Decision Genome** and auditing mutations using a multi-agent framework powered by **Google Gemini 2.0 Flash** and the **Agent Development Kit (ADK)**.
+
+**📖 Documentation:** [Architecture](docs/ARCHITECTURE.md) · [Agents](docs/AGENTS.md) · [Evaluation](docs/EVALUATION.md) · [Security](SECURITY.md) · [Deployment](docs/DEPLOYMENT.md) · [Production](docs/PRODUCTION.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -24,7 +28,113 @@ To facilitate automated grading and human review for the **Kaggle x Google Gemin
 | **6. Security & Guardrails** | Built-in semantic firewall for prompt injection, HIPAA compliance, and PII redaction. | Details in [Security Features](#security-features) & [security_agent.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/src/agents/security_agent.py) |
 | **7. Originality & Authorship** | Features a local cryptographic signature verification engine for originality verification. | Signature in [scripts/generate_project_signature.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/scripts/generate_project_signature.py) |
 | **8. Automated Quality Testing** | Automated test suite verifying schema contracts, mutation math, security blocks, and tool diffs. | Implementation in [tests/test_genome_forensics.py](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/tests/test_genome_forensics.py) |
-| **9. Continuous Deployment (CI/CD)** | GitHub Actions blueprint for continuous linting, automated testing, and automated Cloud Run deployment. | Blueprint in [.github/workflows/deploy.yml](file:///Users/sharathyakara/agy-cli-projects/decision-dna-ai/.github/workflows/deploy.yml) |
+| **9. Continuous Deployment (CI/CD)** | GitHub Actions blueprint for continuous linting, automated testing, and automated Cloud Run deployment. | Blueprint in [.github/workflows/deploy.yml](.github/workflows/deploy.yml) |
+| **10. Google Gemini 2.0 Flash** | Integrated via `google-genai` SDK for root cause narrative and executive summary generation with structured output (`response_schema`). | Implementation in [src/agents/gemini_integration.py](src/agents/gemini_integration.py) |
+| **11. ADK Multi-Agent Orchestration** | Full ADK agent hierarchy with `Agent`, `SequentialAgent`, `ParallelAgent`, and tool bindings. | Definitions in [src/agents/adk_agents.py](src/agents/adk_agents.py) |
+
+---
+
+## 📚 Course Concepts Implemented
+
+This project directly applies concepts from all 5 days of the **Google AI Agents: Intensive Vibe Coding** course:
+
+| Course Day | Concept | Implementation in DecisionDNA AI |
+|:-----------|:--------|:--------------------------------|
+| **Day 1: Foundational Agents** | Agent definition, system instructions, tool use | 9 agents with dedicated system prompts and tool bindings (`src/agents/`) |
+| **Day 1: Tool Calling** | Function calling for external data retrieval | 5 MCP tool modules with structured I/O (`src/tools/`) |
+| **Day 2: Multi-Agent Systems** | Agent orchestration, task decomposition | Pipeline orchestration via ADK `SequentialAgent` + `ParallelAgent` in `adk_agents.py` and deterministic engine in `mutation_engine.py` |
+| **Day 2: Agent Communication** | Passing structured data between agents | Pydantic v2 models as inter-agent data contracts (`decision_models.py` — 14 model classes) |
+| **Day 3: Structured Output** | Schema-enforced LLM responses | Gemini `response_schema` with Pydantic in `gemini_integration.py` + validation across all agents |
+| **Day 3: Safety & Guardrails** | Prompt injection defense, content filtering | `SecurityAgent` with 21 regex patterns + PII redaction + Gemini-enhanced threat classification |
+| **Day 4: Evaluation** | Testing agent behavior systematically | 4 test classes verifying schema validation, mutation math, security guardrails, and MCP tool correctness |
+| **Day 4: Agentic Memory** | State persistence across interactions | Decision Genome snapshots as temporal state, `session_state` for UI persistence, ADK `InMemorySessionService` |
+| **Day 5: Deployment** | Production deployment, CI/CD | Dockerfile + GitHub Actions → Google Cloud Run pipeline |
+| **Day 5: MCP Protocol** | Model Context Protocol for tool integration | 5 MCP-style tool servers with logged, auditable tool calls |
+| **Bonus: Vibe Coding** | Natural language as first-class code | Agent system prompts define behavior in natural language (see §Prompt Design Guidelines) |
+
+---
+
+## 🤖 Gemini 2.0 Flash Integration
+
+DecisionDNA AI uses **Gemini 2.0 Flash** via the `google-genai` Python SDK for three key capabilities:
+
+### Hybrid Architecture: Deterministic + LLM
+
+```
+┌─────────────────────────────────────────────────────┐
+│  User Request                                       │
+├─────────────────────────────────────────────────────┤
+│  SecurityAgent (regex + Gemini threat classification)│
+├─────────────────────────────────────────────────────┤
+│  5 Genome Agents (deterministic diff analysis)      │
+├─────────────────────────────────────────────────────┤
+│  MutationDetectionAgent                              │
+│  ├── Deterministic: weighted score calculation       │
+│  └── Gemini: root cause narrative generation         │
+├─────────────────────────────────────────────────────┤
+│  AuditAgent                                          │
+│  ├── Deterministic: report structure & lineage       │
+│  └── Gemini: executive summary generation            │
+└─────────────────────────────────────────────────────┘
+```
+
+### Why Hybrid?
+
+1. **Reproducibility:** Healthcare compliance requires bit-exact audit trails. The deterministic path guarantees reproducible mutation scores across runs.
+2. **LLM Enhancement:** Gemini adds clinician-readable narratives, regulatory context, and nuanced risk interpretation that pure rule-based systems cannot provide.
+3. **Graceful Degradation:** The system runs fully in MOCK_MODE without a Gemini API key, making it portable for judges to test locally.
+
+### Structured Output with `response_schema`
+
+All Gemini calls use Pydantic-validated `response_schema` to enforce deterministic structured output:
+
+```python
+from google import genai
+from google.genai import types
+
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=prompt,
+    config=types.GenerateContentConfig(
+        system_instruction="You are the MutationDetectionAgent...",
+        response_mime_type="application/json",
+        response_schema=GeminiRootCauseAnalysis,  # Pydantic model
+    ),
+)
+result = response.parsed  # Type-safe Pydantic instance
+```
+
+---
+
+## 🏗️ ADK Multi-Agent Architecture
+
+DecisionDNA defines its agents using the **Google Agent Development Kit (ADK)**, enabling Gemini-powered reasoning with proper tool bindings:
+
+```python
+from google.adk.agents import Agent, SequentialAgent, ParallelAgent
+
+# Individual genome agents with tool bindings
+policy_agent = Agent(
+    name="PolicyGenomeAgent",
+    model="gemini-2.0-flash",
+    instruction="You are a clinical guidelines auditor...",
+    tools=[compare_policy_versions],  # MCP tool function
+)
+
+# Parallel execution of genome agents
+genome_hub = ParallelAgent(
+    name="GenomeAnalysisHub",
+    sub_agents=[policy_agent, contract_agent, rule_agent],
+)
+
+# Sequential forensic pipeline
+pipeline = SequentialAgent(
+    name="ForensicPipeline",
+    sub_agents=[security_agent, genome_hub, mutation_synthesizer],
+)
+```
+
+See the full ADK agent definitions in [`src/agents/adk_agents.py`](src/agents/adk_agents.py).
 
 ---
 

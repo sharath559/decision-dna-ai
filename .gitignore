@@ -1,16 +1,35 @@
-.env
-.local/
-**pycache**/
+# Python
 __pycache__/
-*.pyc
-*.pyo
-.DS_Store
+*.py[cod]
+*$py.class
 *.egg-info/
 dist/
 build/
-.ipynb_checkpoints/
-.streamlit/secrets.toml
-*.log
+*.egg
 
-# Personal demo preparation files
-# (No longer ignored)
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment & Secrets
+.env
+.local/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Ruff
+.ruff_cache/
