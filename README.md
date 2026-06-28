@@ -275,20 +275,20 @@ graph TD
     end
 
     %% Styles
-    classDef default fill:#0f172a,stroke:#1e293b,color:#f8fafc;
-    classDef security fill:#7f1d1d,stroke:#b91c1c,color:#fef2f2;
-    classDef hydration fill:#0c4a6e,stroke:#0284c7,color:#f0f9ff;
-    classDef genome fill:#0f766e,stroke:#0d9488,color:#f0fdfa;
-    classDef agent fill:#581c87,stroke:#7e22ce,color:#faf5ff;
-    classDef analytics fill:#7c2d12,stroke:#c2410c,color:#fff7ed;
-    classDef output fill:#14532d,stroke:#15803d,color:#f0fdf4;
+    classDef default fill:#0f172a,stroke:#1e293b,color:#f8fafc
+    classDef security fill:#7f1d1d,stroke:#b91c1c,color:#fef2f2
+    classDef hydration fill:#0c4a6e,stroke:#0284c7,color:#f0f9ff
+    classDef genome fill:#0f766e,stroke:#0d9488,color:#f0fdfa
+    classDef agent fill:#581c87,stroke:#7e22ce,color:#faf5ff
+    classDef analytics fill:#7c2d12,stroke:#c2410c,color:#fff7ed
+    classDef output fill:#14532d,stroke:#15803d,color:#f0fdf4
 
-    class B security;
-    class D1,D2,D3,D4,D5 hydration;
-    class E1,E2 genome;
-    class F1,F2,F3,F4,F5 agent;
-    class G,H analytics;
-    class I,J,K output;
+    class B security
+    class D1,D2,D3,D4,D5 hydration
+    class E1,E2 genome
+    class F1,F2,F3,F4,F5 agent
+    class G,H analytics
+    class I,J,K output
 ```
 
 ### 🧬 The Mathematical Model of Decision Genomes
